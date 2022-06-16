@@ -29,4 +29,20 @@ const gameboard = (() => {
     }
 })();
 
+const player = (name) => {
+    // properties
+    name: name
+    // player: ... (1 || 2)
+    // type: ... ('human' || 'computer)
+
+    // methods
+    // ...
+
+    return {
+        // ...
+    }
+}
+
 gameboard.display();
+
+let player1 = player('shannon');
