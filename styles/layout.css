@@ -1,0 +1,41 @@
+body {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.set-players {
+    display: flex;
+}
+
+    .player-input {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+    }
+
+        .player-input input {
+            text-align: center;
+        }
+
+#board-space {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+
+    height: auto; width: auto;
+}
+
+#board-space .row {
+    display: flex;
+    flex-flow: row;
+}
+
+#board-space .row div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    height: 5em; width: 5em;
+}
