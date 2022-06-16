@@ -29,20 +29,29 @@ const gameboard = (() => {
     }
 })();
 
-const player = (name) => {
+const player = {
     // properties
-    name: name
+    // name: ...
     // player: ... (1 || 2)
     // type: ... ('human' || 'computer)
 
     // methods
-    // ...
-
-    return {
-        // ...
+    create: function(values) {
+        let instance = Object.create(this);
+        Object.keys(values).forEach(function(key) {
+            instance[key] = values[key];
+        });
+        return instance;
     }
-}
+
+    // return {
+    //     // ...
+    // }
+};
 
 gameboard.display();
 
-let player1 = player('shannon');
+let player1 = player.create({name: 'shannon', player: 1, type: 'human'});
+let player2 = player.create({name: 'duane', player: 2, type: 'human'});
+console.log({player1});
+console.log({player2});
