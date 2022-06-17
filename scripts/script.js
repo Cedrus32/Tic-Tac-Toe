@@ -41,6 +41,11 @@ const gameboard = (() => {
     
     // cache DOM
     const _boardSpace = document.getElementById('board-space');
+    // const _cells = document.querySelectorAll('boardspace div div');
+    // console.log({_cells});
+
+    // bind events
+    // * event to mark board included with display();
 
     // methods
     const display = () => {
@@ -52,46 +57,22 @@ const gameboard = (() => {
                 let cellDiv = document.createElement('div');
                 cellDiv.textContent = _board[row][cell];
                 rowDiv.appendChild(cellDiv);
+                cellDiv.addEventListener('click', (e) => {
+                    console.log(e.target);
+                });
             }
         }
     };
 
+    const markBoard = () => {
+        
+    }
+
     // make public
     return {
-        display
+        display // todo share to pubsub? (take out of public scope)
     };
 })();
-
-function createPlayer(name) {
-    // data
-    let _name = name;
-    // * let _player = // from pubsub
-    // * let _input = // from pubsub
-
-    // cache DOM
-
-    // bind events
-
-    // methods
-    function displayName() {
-        console.log(_name);
-    }
-
-    function displayPlayer() {
-        console.log(_player);
-    }
-
-    function displayType() {
-        console.log(_type);
-    }
-
-    // make public
-    return {
-        displayName,
-        displayPlayer,
-        displayType
-    };
-};
 
 const playGame = (() => {
     // data
@@ -99,17 +80,13 @@ const playGame = (() => {
 
     // cache DOM
 
-
     // bind events
 
     // methods
 
 
     // flow
-    // ? on start click, get input values --> create players
-    // ?                                  --> display player names
-
-    gameboard.display();
+    gameboard.display(); // todo accept from pubsub? (keep in private scope)
     // ? on board click, make move --> check if legal
     // ?                           --> mark gameboard
     // ?                           --> clear gameboard
@@ -119,35 +96,49 @@ const playGame = (() => {
     // ?                 update ticker
 })();
 
-const init = (() => {
+function createPlayer(name) {
     // data
+    let _name = name;
 
+    // methods
+    function displayName() {
+        console.log(_name);
+    };
+
+    function displayPlayer() {
+        console.log(_player);
+    };
+
+    function displayType() {
+        console.log(_type);
+    };
+
+    // make public
+    return {
+        displayName,
+        displayPlayer,
+        displayType
+    };
+};
+
+const init = (() => {
     // cache DOM
     const _startButton = document.getElementById('start');
-    //// console.log(_startButton);
     let _inputX = document.querySelector('div input#player-x');
     let _inputO = document.querySelector('div input#player-o');
-    //// console.log(_playerX);
-    //// console.log(_playerO);
     let _labelX = _inputX.nextElementSibling;
     let _labelO = _inputO.nextElementSibling;
-    //// console.log(_labelX);
-    //// console.log(_labelO);
 
     // bind listeners
     _startButton.addEventListener('click', () => {
         setPlayers(_inputX, _inputO);
-        // playGame();
+        playGame();
     });
 
     // methods
     function setPlayers(inputX, inputO) {
         let playerX = createPlayer(inputX.value);
         let playerO = createPlayer(inputO.value);
-        //// playerX.displayName();
-        //// playerO.displayName();
-        //// console.log(_labelX);
-        //// console.log(_labelO);
         displayName(_labelX, inputX);
         displayName(_labelO, inputO);
     };
@@ -157,5 +148,4 @@ const init = (() => {
         target.classList.toggle('hide');
         source.classList.toggle('hide');
     };
-
 })();
