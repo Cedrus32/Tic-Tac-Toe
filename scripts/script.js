@@ -1,6 +1,6 @@
 'use strict'
 
-const event = {
+const events = {
     // * event.link('someEvent', someMethod)      // links event with relevant method into event:method pair
     // * event.unlink('someEvent', someMethod)    // removes event:method pair
     // * event.call('someEvent', someData)        // calls event:method pair with relevant data
@@ -54,17 +54,19 @@ const gameboard = (() => {
                  ];
     
     // cache DOM
-    const _boardSpace = document.getElementById('board-space');
+    const boardSpace = document.getElementById('board-space');
     //// console.log({_cells});
 
     // bind events
+    // events.call('startGame', _board);
+    // events.call('pauseGame', _board);
 
     // methods
     const display = () => {
         for (let row in _board) {
             let rowDiv = document.createElement('div');
             rowDiv.classList.add('row');
-            _boardSpace.appendChild(rowDiv);
+            boardSpace.appendChild(rowDiv);
             for (let cell in _board[row]) {
                 let cellDiv = document.createElement('div');
                 cellDiv.textContent = _board[row][cell];
@@ -72,40 +74,50 @@ const gameboard = (() => {
             }
         }
     };
-
     function logClick(e) {
         console.log(e.target);
-    }
-
-    const addClick = (board) => {
-        // todo make for loop to cycle through each cell; -- share with playGame via pubsub
+    };
+    function addClicks(board) {
+        //// console.log(board);
         for (let x = 0; x < 3; x++) {
+            let row = board.children[x];
+            //// console.log(row);
             for (let y = 0; y < 3; y++) {
-                board[x][y].addEventListener('click', logClick);
+                let cell = row.children[y]
+                //// console.log (cell);
+                cell.addEventListener('click', logClick);
+                //// console.log('click added');
             };
         };
     };
-
-    const removeClick = (board) => {
-        // todo make for loop to cycle through each cell; -- share with playGame via pubsub
+    function removeClicks(board) {
+        //// console.log(board);
         for (let x = 0; x < 3; x++) {
+            let row = board.children[x];
+            //// console.log(row);
             for (let y = 0; y < 3; y++) {
-                board[x][y].removeEventListener('click', logClick);
+                let cell = row.children[y];
+                //// console.log (cell);
+                cell.removeEventListener('click', logClick);
+                //// console.log('click removed');
             };
         };
-    }
-
+    };
     // todo logic to decide whether to accept click & make change to _board, gameboard.display()
     // const markBoard = () => {
         
-    // }
+    // };
+    function returnBoard() {
+        return boardSpace;
+    };
 
     // make public to global
     return {
         display,
-        addClick,
-        removeClick,
-        // markBoard // todo share with playGame() via pubsub? (take out of public scope)
+        addClicks,
+        removeClicks,
+        // markBoard, // todo share with playGame() via pubsub? (take out of public scope)
+        returnBoard
     };
 })();
 
@@ -113,6 +125,8 @@ const playGame = (() => {
     // data
 
     // cache DOM
+    const _gameContainer = document.getElementById('game-container');
+    //// console.log(_gameContainer);
 
     // bind events
     // ? on board click, make move --> check if legal
@@ -148,14 +162,14 @@ function createPlayer(value) {
     return {
         returnName,
         displayName,
-        savePlayer,
-        // deletePlayer
+        savePlayer
     };
 };
 
 const init = (() => {
     // data
     let _players = [];
+    let board = gameboard.returnBoard();
 
     // cache DOM
     let _inputX = document.querySelector('div input#player-x');
@@ -163,21 +177,19 @@ const init = (() => {
     let _labelX = _inputX.nextElementSibling;
     let _labelO = _inputO.nextElementSibling;
     const _startButton = document.getElementById('start');
-    const _gameContainer = document.getElementById('game-container');
     const _restartButton = document.getElementById('restart');
-    //// console.log(_gameContainer);
 
     // bind listeners
     _startButton.addEventListener('click', () => {
         //// console.log(_inputX, _inputO);
         setPlayers(_inputX, _inputO); // ! WORKS
-        addClicks(); // ! WIP
+        gameboard.addClicks(board); // ! WORKS
         // playGame(); // ! WIP
     });
     // * addClick functionality in showGame()
     _restartButton.addEventListener('click', () => {
-        unsetPlayers(_players);
-        removeClicks();
+        unsetPlayers(_players); // ! WORKS
+        gameboard.removeClicks(board); // ! WORKS
     });
 
     // methods
@@ -216,18 +228,10 @@ const init = (() => {
         toggleHide(target); // toggles input to show
         toggleHide(source); // toggles label to hide
     };
-    // function addClicks() {
-    //     _startButton.classList.add('hide');
-    //     _gameContainer.classList.remove('hide');
-    // };
-    // function removeClicks() {
-    //     _startButton.classList.remove('hide');
-    //     _gameContainer.classList.add('hide');
-    // };
     function toggleHide(element) {
         element.classList.toggle('hide');
     };
     function clearInput(input) {
         input.value = '';
-    }
+    };
 })();
