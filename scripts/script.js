@@ -1,31 +1,45 @@
 'use strict'
 
-const events = {
+const event = {
+    // * event.link('someEvent', someMethod)      // links event with relevant method into event:method pair
+    // * event.unlink('someEvent', someMethod)    // removes event:method pair
+    // * event.call('someEvent', someData)        // calls event:method pair with relevant data
+
     // data
-    _events: {},
+    _storedEvents: {
+        // stores key:value (event:handler) pairs 
+        // * 'someEvent': [someMethod, someOtherMethod, anotherMethod]
+    },
 
     // methods
-    subscribe: function (eventName, fn) {
-        this._events[eventName] = this._events[eventName] || [];
-        this._events[eventName].push(fn);
+    link: function (eventName, fn) {
+    //             'someEvent', someMethod
+        // preserve key:method pair in _storedEvents OR create a new blank key:method pair
+        this._storedEvents[eventName] = this._storedEvents[eventName] || [];
+        // push someMethod to key 'someEvent'
+        this._storedEvents[eventName].push(fn);
     },
-    unsubscribe: function (eventName, fn) {
-        if (this._events[eventName]) {
-            for (let i = o; i < (this._events[eventName].length); i++) {
+    unlink: function (eventName, fn) {
+    //               'someEvent', someMethod
+        // if key 'someEvent' exists...
+        if (this._storedEvents[eventName]) {
+            // for each method linked to key...
+            for (let i = 0; i < (this._storedEvents[eventName].length); i++) {
+                // if linked method === someMethod being called...
                 if (this[eventName][i] === fn) {
-                    this._events[eventName].splice(i, 1);
+                    // remove linked method from key
+                    this._storedEvents[eventName].splice(i, 1);
                     break;
                 };
             };
         };
     },
-    publish: function (eventName, data) {
-        // this === events
-        console.log(eventName);
-        console.log(data);
-        console.log(this._events[eventName]);
-        if (this._events[eventName]) {
-            this._events[eventName].forEach(function(fn) {
+    call: function (eventName, data) {
+    //            'someEvent', someMethod
+        // if key 'someEvent' exists...
+        if (this._storedEvents[eventName]) {
+            // call each linked method with the data provided
+            this._storedEvents[eventName].forEach(function(fn) {
                 fn(data);
             });
         };
@@ -44,7 +58,6 @@ const gameboard = (() => {
     //// console.log({_cells});
 
     // bind events
-    // * add/remove event listeners in addClick() / removeClick() in methods
 
     // methods
     const display = () => {
@@ -60,10 +73,27 @@ const gameboard = (() => {
         }
     };
 
-    // todo make for loop to cycle through each cell; -- share with playGame via pubsub
-    // cellDiv.addEventListener('click', (e) => {
-    //     console.log(e.target);
-    // });
+    function logClick(e) {
+        console.log(e.target);
+    }
+
+    const addClick = (board) => {
+        // todo make for loop to cycle through each cell; -- share with playGame via pubsub
+        for (let x = 0; x < 3; x++) {
+            for (let y = 0; y < 3; y++) {
+                board[x][y].addEventListener('click', logClick);
+            };
+        };
+    };
+
+    const removeClick = (board) => {
+        // todo make for loop to cycle through each cell; -- share with playGame via pubsub
+        for (let x = 0; x < 3; x++) {
+            for (let y = 0; y < 3; y++) {
+                board[x][y].removeEventListener('click', logClick);
+            };
+        };
+    }
 
     // todo logic to decide whether to accept click & make change to _board, gameboard.display()
     // const markBoard = () => {
@@ -72,9 +102,9 @@ const gameboard = (() => {
 
     // make public to global
     return {
-        display, // todo share with init() via pubsub? (take out of public scope)
-        // addClick // todo share with init() via pubsub (take out of public scope)
-        // removeClick // todo share with init() via pubsub (take out of public scope)
+        display,
+        addClick,
+        removeClick,
         // markBoard // todo share with playGame() via pubsub? (take out of public scope)
     };
 })();
@@ -85,10 +115,6 @@ const playGame = (() => {
     // cache DOM
 
     // bind events
-
-    // methods
-
-    // actions
     // ? on board click, make move --> check if legal
     // ?                           --> mark gameboard
     // ?                           --> clear gameboard
@@ -96,6 +122,11 @@ const playGame = (() => {
     // ?                 listen for win/loss/tie
     // ?                 track turn
     // ?                 update ticker
+
+    // methods
+
+    // actions
+    gameboard.display();
 })();
 
 function createPlayer(value) {
@@ -105,22 +136,21 @@ function createPlayer(value) {
     // methods
     function returnName() {
         return _name;
+    };
+    function displayName() {
+        console.log(_name);
     }
-
     function savePlayer(saveState) {
         saveState.push(this);
-    }
-
-    // function deletePlayer(saveState) {
-    //     saveState.
-    // }
+    };
 
     // make public to global
     return {
         returnName,
+        displayName,
         savePlayer,
         // deletePlayer
-    }
+    };
 };
 
 const init = (() => {
@@ -140,44 +170,64 @@ const init = (() => {
     // bind listeners
     _startButton.addEventListener('click', () => {
         //// console.log(_inputX, _inputO);
-        setPlayers(_inputX, _inputO);
-        showGame();
-        // playGame();
+        setPlayers(_inputX, _inputO); // ! WORKS
+        addClicks(); // ! WIP
+        // playGame(); // ! WIP
     });
-
+    // * addClick functionality in showGame()
     _restartButton.addEventListener('click', () => {
-        // deletePlayers(playerX, playerO);
-        hideGame();
-    })
+        unsetPlayers(_players);
+        removeClicks();
+    });
 
     // methods
     function setPlayers(inputX, inputO) {
+        // create players
         let _playerX = createPlayer(inputX.value);
         let _playerO = createPlayer(inputO.value);
+        // save players
         _playerX.savePlayer(_players);
         _playerO.savePlayer(_players);
-        //// console.log(_players);
-        //// console.log(_players[0])
-        //// console.log(_players[1])
-        displayName(_labelX, _inputX);
-        displayName(_labelO, _inputO);
+        // toggle input/label to show player names
+        showName(_labelX, _inputX);
+        showName(_labelO, _inputO);
+        //// _playerX.displayName();
+        //// _playerO.displayName();
     };
-
-    function displayName(target, source) {
+    function showName(target, source) {
         target.textContent = source.value;
-        target.classList.toggle('hide');
-        source.classList.toggle('hide');
+        toggleHide(target); // toggles input to hide
+        toggleHide(source); // toggles label to show
     };
-
-    function showGame() {
-        _startButton.classList.add('hide');
-        _gameContainer.classList.remove('hide');
-        gameboard.display(); // todo accept from gameboard via pubsub? (keep in private scope)
-    }
-
-    function hideGame() {
-        _startButton.classList.remove('hide');
-        _gameContainer.classList.add('hide');
-        // gameboard.display(); // todo accept from gameboard via pubsub? (keep in private scope)
+    function unsetPlayers(players) {
+        // delete players
+        for (let i = 0; i < 2; i++) {
+            players.pop();
+        }
+        // clear inputs
+        clearInput(_inputX);
+        clearInput(_inputO);
+        // toggle input/label to hide player names
+        hideName(_labelX, _inputX)
+        hideName(_labelO, _inputO)
+    };
+    function hideName(target, source) {
+        target.textContent = '';
+        toggleHide(target); // toggles input to show
+        toggleHide(source); // toggles label to hide
+    };
+    // function addClicks() {
+    //     _startButton.classList.add('hide');
+    //     _gameContainer.classList.remove('hide');
+    // };
+    // function removeClicks() {
+    //     _startButton.classList.remove('hide');
+    //     _gameContainer.classList.add('hide');
+    // };
+    function toggleHide(element) {
+        element.classList.toggle('hide');
+    };
+    function clearInput(input) {
+        input.value = '';
     }
 })();
