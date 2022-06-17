@@ -41,11 +41,10 @@ const gameboard = (() => {
     
     // cache DOM
     const _boardSpace = document.getElementById('board-space');
-    // const _cells = document.querySelectorAll('boardspace div div');
-    // console.log({_cells});
+    //// console.log({_cells});
 
     // bind events
-    // * event to mark board included with display();
+    // * add/remove event listeners in addClick() / removeClick() in methods
 
     // methods
     const display = () => {
@@ -57,26 +56,31 @@ const gameboard = (() => {
                 let cellDiv = document.createElement('div');
                 cellDiv.textContent = _board[row][cell];
                 rowDiv.appendChild(cellDiv);
-                cellDiv.addEventListener('click', (e) => {
-                    console.log(e.target);
-                });
             }
         }
     };
 
-    const markBoard = () => {
-        
-    }
+    // todo make for loop to cycle through each cell; -- share with playGame via pubsub
+    // cellDiv.addEventListener('click', (e) => {
+    //     console.log(e.target);
+    // });
 
-    // make public
+    // todo logic to decide whether to accept click & make change to _board, gameboard.display()
+    // const markBoard = () => {
+        
+    // }
+
+    // make public to global
     return {
-        display // todo share to pubsub? (take out of public scope)
+        display, // todo share with init() via pubsub? (take out of public scope)
+        // addClick // todo share with init() via pubsub (take out of public scope)
+        // removeClick // todo share with init() via pubsub (take out of public scope)
+        // markBoard // todo share with playGame() via pubsub? (take out of public scope)
     };
 })();
 
 const playGame = (() => {
     // data
-    console.log('play game');
 
     // cache DOM
 
@@ -84,9 +88,7 @@ const playGame = (() => {
 
     // methods
 
-
-    // flow
-    gameboard.display(); // todo accept from pubsub? (keep in private scope)
+    // actions
     // ? on board click, make move --> check if legal
     // ?                           --> mark gameboard
     // ?                           --> clear gameboard
@@ -96,51 +98,69 @@ const playGame = (() => {
     // ?                 update ticker
 })();
 
-function createPlayer(name) {
+function createPlayer(value) {
     // data
-    let _name = name;
+    let _name = value;
 
     // methods
-    function displayName() {
-        console.log(_name);
-    };
+    function returnName() {
+        return _name;
+    }
 
-    function displayPlayer() {
-        console.log(_player);
-    };
+    function savePlayer(saveState) {
+        saveState.push(this);
+    }
 
-    function displayType() {
-        console.log(_type);
-    };
+    // function deletePlayer(saveState) {
+    //     saveState.
+    // }
 
-    // make public
+    // make public to global
     return {
-        displayName,
-        displayPlayer,
-        displayType
-    };
+        returnName,
+        savePlayer,
+        // deletePlayer
+    }
 };
 
 const init = (() => {
+    // data
+    let _players = [];
+
     // cache DOM
-    const _startButton = document.getElementById('start');
     let _inputX = document.querySelector('div input#player-x');
     let _inputO = document.querySelector('div input#player-o');
     let _labelX = _inputX.nextElementSibling;
     let _labelO = _inputO.nextElementSibling;
+    const _startButton = document.getElementById('start');
+    const _gameContainer = document.getElementById('game-container');
+    const _restartButton = document.getElementById('restart');
+    //// console.log(_gameContainer);
 
     // bind listeners
     _startButton.addEventListener('click', () => {
+        //// console.log(_inputX, _inputO);
         setPlayers(_inputX, _inputO);
-        playGame();
+        showGame();
+        // playGame();
     });
+
+    _restartButton.addEventListener('click', () => {
+        // deletePlayers(playerX, playerO);
+        hideGame();
+    })
 
     // methods
     function setPlayers(inputX, inputO) {
-        let playerX = createPlayer(inputX.value);
-        let playerO = createPlayer(inputO.value);
-        displayName(_labelX, inputX);
-        displayName(_labelO, inputO);
+        let _playerX = createPlayer(inputX.value);
+        let _playerO = createPlayer(inputO.value);
+        _playerX.savePlayer(_players);
+        _playerO.savePlayer(_players);
+        //// console.log(_players);
+        //// console.log(_players[0])
+        //// console.log(_players[1])
+        displayName(_labelX, _inputX);
+        displayName(_labelO, _inputO);
     };
 
     function displayName(target, source) {
@@ -148,4 +168,16 @@ const init = (() => {
         target.classList.toggle('hide');
         source.classList.toggle('hide');
     };
+
+    function showGame() {
+        _startButton.classList.add('hide');
+        _gameContainer.classList.remove('hide');
+        gameboard.display(); // todo accept from gameboard via pubsub? (keep in private scope)
+    }
+
+    function hideGame() {
+        _startButton.classList.remove('hide');
+        _gameContainer.classList.add('hide');
+        // gameboard.display(); // todo accept from gameboard via pubsub? (keep in private scope)
+    }
 })();
