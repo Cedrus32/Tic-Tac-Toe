@@ -58,8 +58,6 @@ const gameboard = (() => {
     //// console.log({_cells});
 
     // bind events
-    // events.call('startGame', _board);
-    // events.call('pauseGame', _board);
 
     // methods
     const display = () => {
@@ -110,14 +108,25 @@ const gameboard = (() => {
     };
     // todo logic to decide whether to accept click & make change to _board, gameboard.display()
     function markBoard(e) {
-        e.target.textContent = 'X';
-        _board[e.target.id] = 'X';
-        console.log(_board);
-        //// logClick(e);
+        if (markValid(e) === true) {
+            e.target.textContent = 'X';
+            _board[e.target.id] = 'X';
+
+            logClick(e);
+            console.log(_board);
+        };
     };
-    function returnBoard() {
+    function markValid(e) {
+        if (_board[e.target.id] === '') {
+            return true;
+        };
+    };
+    function returnBoardSpace() {
         return boardSpace;
     };
+    function returnBoardArray() {
+        return _board;
+    }
     function logClick(e) {
         console.log(e.target);
     };
@@ -127,8 +136,8 @@ const gameboard = (() => {
         display,
         addClicks,
         removeClicks,
-        // markBoard, // todo share with playGame() via pubsub? (take out of public scope)
-        returnBoard
+        returnBoardSpace,
+        returnBoardArray
     };
 })();
 
@@ -136,8 +145,8 @@ const playGame = (() => {
     // data
 
     // cache DOM
-    const _gameContainer = document.getElementById('game-container');
-    //// console.log(_gameContainer);
+    let board = gameboard.returnBoardArray();
+    //// console.log(board);
 
     // bind events
     // ? on board click, make move --> check if legal
@@ -149,9 +158,28 @@ const playGame = (() => {
     // ?                 update ticker
 
     // methods
+    function markBoard(e) {
+        if (markValid(e) === true) {
+            e.target.textContent = 'X';
+            board[e.target.id] = 'X';
+
+            logClick(e);
+            console.log(_board);
+        };
+    };
+    function markValid(e) {
+        if (board[e.target.id] === '') {
+            return true;
+        };
+    };
 
     // actions
     gameboard.display();
+
+    return {
+        markBoard
+    }
+
 })();
 
 function createPlayer(value) {
@@ -180,7 +208,7 @@ function createPlayer(value) {
 const init = (() => {
     // data
     let _players = [];
-    let board = gameboard.returnBoard();
+    let board = gameboard.returnBoardSpace();
 
     // cache DOM
     let _inputX = document.querySelector('div input#player-x');
@@ -195,7 +223,6 @@ const init = (() => {
         //// console.log(_inputX, _inputO);
         setPlayers(_inputX, _inputO); // ! WORKS
         gameboard.addClicks(board); // ! WORKS
-        // playGame(); // ! WIP
     });
     // * addClick functionality in showGame()
     _restartButton.addEventListener('click', () => {
