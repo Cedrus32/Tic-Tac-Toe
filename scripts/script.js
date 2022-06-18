@@ -48,9 +48,9 @@ const events = {
 
 const gameboard = (() => {
     // data
-    let _board = [['X', 'X', 'X'],
-                  ['O', 'O', 'O'],
-                  ['O', 'O', 'O'],
+    let _board = ['', '', '',
+                  '', '', '',
+                  '', '', '',
                  ];
     
     // cache DOM
@@ -63,13 +63,19 @@ const gameboard = (() => {
 
     // methods
     const display = () => {
-        for (let row in _board) {
-            let rowDiv = document.createElement('div');
-            rowDiv.classList.add('row');
-            boardSpace.appendChild(rowDiv);
-            for (let cell in _board[row]) {
-                let cellDiv = document.createElement('div');
-                cellDiv.textContent = _board[row][cell];
+        let rowDiv;
+        let cellDiv;
+        for(let i = 0; i < 12; i++) {
+            if ((i === 0) || (i%4 === 0)) {
+                rowDiv = document.createElement('div');
+                rowDiv.classList.add('row');
+                //// console.log(rowDiv);
+                boardSpace.appendChild(rowDiv);
+            } else {
+                cellDiv = document.createElement('div');
+                console.log(rowDiv);
+                console.log(cellDiv);
+                // cellDiv.textContent = _board[row][cell]; //todo functionality in markBoard?
                 rowDiv.appendChild(cellDiv);
             }
         }
