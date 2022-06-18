@@ -76,6 +76,7 @@ const playGame = (() => {
                    ['0', '4', '8'],
                    ['2', '4', '6'],
                   ];
+    let _winMatch;
     let _xMarks = [];
     let _oMarks = [];
     let _currPlayer = 'X';
@@ -133,6 +134,9 @@ const playGame = (() => {
                 } else {
                     checkWin(_oMarks);
                 }
+                if ((turnCounter === 9) && (!_winMatch)) {
+                    console.log('tie');
+                }
             };
             switchPlayer();
 
@@ -152,17 +156,16 @@ const playGame = (() => {
         //// console.log(boardArray);
         //// console.log(_xMarks);
         //// console.log(_oMarks);
-        let winMatch;
         playerMarks.sort();
         for (let set in _wins) {
             console.log(_wins[set]);
             console.log(playerMarks);
-            winMatch = _wins[set].every(mark => playerMarks.includes(mark));
-            console.log(winMatch);
-            if (winMatch) {
+            _winMatch = _wins[set].every(mark => playerMarks.includes(mark));
+            console.log(_winMatch);
+            if (_winMatch) {
                 console.log(_currPlayer + ' wins!');
                 break;
-            };
+            }
         };
     };
     function switchPlayer() {
