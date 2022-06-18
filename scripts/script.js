@@ -249,9 +249,13 @@ const init = (() => {
         //// _playerO.displayName();
     };
     function showName(target, source) {
+        // target === label
+        // source === input
         target.textContent = source.value;
-        toggleHide(target); // toggles input to hide
-        toggleHide(source); // toggles label to show
+        if (source.classList.length === 0) {
+            hideElement(source); // hides input
+        }
+        showElement(target); // shows label
     };
     function unsetPlayers(players) {
         // delete players
@@ -266,13 +270,20 @@ const init = (() => {
         hideName(_labelO, _inputO)
     };
     function hideName(target, source) {
+        // target === label
+        // source === input
         target.textContent = '';
-        toggleHide(target); // toggles input to show
-        toggleHide(source); // toggles label to hide
+        if (target.classList.length === 0) {
+            hideElement(source); // hides label
+        }
+        showElement(source); // shows input
     };
-    function toggleHide(element) {
-        element.classList.toggle('hide');
+    function hideElement(element) {
+        element.classList.add('hide');
     };
+    function showElement(element) {
+        element.classList.remove('hide');
+    }
     function clearInput(input) {
         input.value = '';
     };
