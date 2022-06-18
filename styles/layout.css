@@ -4,6 +4,10 @@ body {
     align-items: center;
 }
 
+.hide {
+    display: none;
+}
+
 .set-players {
     display: flex;
 }
@@ -12,30 +16,43 @@ body {
         display: flex;
         flex-flow: column;
         align-items: center;
+
+        width: 30vw;
+        border: 1px solid blue;
     }
 
         .player-input input {
             text-align: center;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            /* margin doesn't account for 2px top-bottom border */
         }
 
-#board-space {
-    display: flex;
+#game-container {
+    display:flex;
     flex-flow: column;
     justify-content: center;
     align-items: center;
-
-    height: auto; width: auto;
 }
 
-#board-space .row {
-    display: flex;
-    flex-flow: row;
-}
+    #board-space {
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+        align-items: center;
 
-#board-space .row div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
-    height: 5em; width: 5em;
-}
+        height: auto; width: auto;
+    }
+
+        #board-space .row {
+            display: flex;
+            flex-flow: row;
+        }
+
+            #board-space .row div {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                
+                height: 20vw; width: 20vw;
+            }

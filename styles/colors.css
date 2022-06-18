@@ -1,0 +1,8 @@
+#board-space {
+    background-color: lightgray;
+    border: 1px solid red;
+}
+
+#board-space .row div {
+    border: 1px solid black;
+}
