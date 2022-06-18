@@ -80,9 +80,6 @@ const gameboard = (() => {
             }
         }
     };
-    function logClick(e) {
-        console.log(e.target);
-    };
     function addClicks(board) {
         //// console.log(board);
         for (let x = 0; x < 3; x++) {
@@ -111,10 +108,14 @@ const gameboard = (() => {
     };
     // todo logic to decide whether to accept click & make change to _board, gameboard.display()
     function markBoard(e) {
+        e.target.textContent = 'X';
         logClick(e);
     };
     function returnBoard() {
         return boardSpace;
+    };
+    function logClick(e) {
+        console.log(e.target);
     };
 
     // make public to global
