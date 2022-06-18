@@ -1,51 +1,5 @@
 'use strict'
 
-// const events = {
-//     // * event.link('someEvent', someMethod)      // links event with relevant method into event:method pair
-//     // * event.unlink('someEvent', someMethod)    // removes event:method pair
-//     // * event.call('someEvent', someData)        // calls event:method pair with relevant data
-
-//     // data
-//     _storedEvents: {
-//         // stores key:value (event:handler) pairs 
-//         // * 'someEvent': [someMethod, someOtherMethod, anotherMethod]
-//     },
-
-//     // methods
-//     link: function (eventName, fn) {
-//     //             'someEvent', someMethod
-//         // preserve key:method pair in _storedEvents OR create a new blank key:method pair
-//         this._storedEvents[eventName] = this._storedEvents[eventName] || [];
-//         // push someMethod to key 'someEvent'
-//         this._storedEvents[eventName].push(fn);
-//     },
-//     unlink: function (eventName, fn) {
-//     //               'someEvent', someMethod
-//         // if key 'someEvent' exists...
-//         if (this._storedEvents[eventName]) {
-//             // for each method linked to key...
-//             for (let i = 0; i < (this._storedEvents[eventName].length); i++) {
-//                 // if linked method === someMethod being called...
-//                 if (this[eventName][i] === fn) {
-//                     // remove linked method from key
-//                     this._storedEvents[eventName].splice(i, 1);
-//                     break;
-//                 };
-//             };
-//         };
-//     },
-//     call: function (eventName, data) {
-//     //            'someEvent', someMethod
-//         // if key 'someEvent' exists...
-//         if (this._storedEvents[eventName]) {
-//             // call each linked method with the data provided
-//             this._storedEvents[eventName].forEach(function(fn) {
-//                 fn(data);
-//             });
-//         };
-//     }
-// };
-
 const gameboard = (() => {
     // data
     let boardArray = ['', '', '',
@@ -113,11 +67,23 @@ const gameboard = (() => {
 
 const playGame = (() => {
     // data
+    const _wins = [['0', '1', '2'],
+                   ['3', '4', '5'],
+                   ['6', '7', '8'],
+                   ['0', '3', '6'],
+                   ['1', '4', '7'],
+                   ['2', '5', '8'],
+                   ['0', '4', '8'],
+                   ['2', '4', '6'],
+                  ];
+    let _xMarks = [];
+    let _oMarks = [];
     let _currPlayer = 'X';
+    let turnCounter = 0;
+    let boardArray = gameboard.returnBoardArray();
+    //// console.log(boardArray);
 
     // cache DOM
-    let boardArray = gameboard.returnBoardArray();
-    //// console.log(board);
 
     // bind events
 
@@ -147,16 +113,31 @@ const playGame = (() => {
                 //// console.log('click removed');
             };
         };
+        // turnCounter = 0; //? add later if does not re-initialize on restart
     };
     function markBoard(e) {
         if (markValid(e) === true) {
-            console.log({_currPlayer});
+            turnCounter++;
+            //// console.log({_currPlayer});
             e.target.textContent = _currPlayer[0];
             boardArray[e.target.id] = _currPlayer[0];
+
+            if (_currPlayer === 'X') {
+                _xMarks.push(e.target.id);
+            } else {
+                _oMarks.push(e.target.id);
+            };
+            if (turnCounter >= 5) {
+                if (_currPlayer === 'X') {
+                    checkWin(_xMarks);
+                } else {
+                    checkWin(_oMarks);
+                }
+            };
             switchPlayer();
 
             logClick(e);
-            console.log(boardArray);
+            //// console.log(boardArray);
         };
     };
     function markValid(e) {
@@ -167,20 +148,37 @@ const playGame = (() => {
     function logClick(e) {
         console.log(e.target);
     };
+    function checkWin(playerMarks) {
+        //// console.log(boardArray);
+        //// console.log(_xMarks);
+        //// console.log(_oMarks);
+        let winMatch;
+        playerMarks.sort();
+        for (let set in _wins) {
+            console.log(_wins[set]);
+            console.log(playerMarks);
+            winMatch = _wins[set].every(mark => playerMarks.includes(mark));
+            console.log(winMatch);
+            if (winMatch) {
+                console.log(_currPlayer + ' wins!');
+                break;
+            };
+        };
+    };
     function switchPlayer() {
         if (_currPlayer === 'X') {
             _currPlayer = 'O';
         } else {
             _currPlayer = 'X';
         };
-    }
+    };
 
     // actions
     gameboard.display();
 
     return {
         addClicks,
-        removeClicks,
+        removeClicks
     }
 
 })();
