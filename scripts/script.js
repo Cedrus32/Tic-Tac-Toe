@@ -111,6 +111,8 @@ const gameboard = (() => {
     // todo logic to decide whether to accept click & make change to _board, gameboard.display()
     function markBoard(e) {
         e.target.textContent = 'X';
+        _board[e.target.id] = 'X';
+        console.log(_board);
         //// logClick(e);
     };
     function returnBoard() {
