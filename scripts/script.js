@@ -91,7 +91,7 @@ const gameboard = (() => {
             for (let y = 0; y < 3; y++) {
                 let cell = row.children[y]
                 //// console.log (cell);
-                cell.addEventListener('click', logClick);
+                cell.addEventListener('click', markBoard);
                 //// console.log('click added');
             };
         };
@@ -104,15 +104,15 @@ const gameboard = (() => {
             for (let y = 0; y < 3; y++) {
                 let cell = row.children[y];
                 //// console.log (cell);
-                cell.removeEventListener('click', logClick);
+                cell.removeEventListener('click', markBoard);
                 //// console.log('click removed');
             };
         };
     };
     // todo logic to decide whether to accept click & make change to _board, gameboard.display()
-    // const markBoard = () => {
-        
-    // };
+    function markBoard(e) {
+        logClick(e);
+    };
     function returnBoard() {
         return boardSpace;
     };
