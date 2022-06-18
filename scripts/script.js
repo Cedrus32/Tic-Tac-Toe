@@ -65,6 +65,7 @@ const gameboard = (() => {
     const display = () => {
         let rowDiv;
         let cellDiv;
+        let cellCounter = 0;
         for(let i = 0; i < 12; i++) {
             if ((i === 0) || (i%4 === 0)) {
                 rowDiv = document.createElement('div');
@@ -73,10 +74,11 @@ const gameboard = (() => {
                 boardSpace.appendChild(rowDiv);
             } else {
                 cellDiv = document.createElement('div');
-                console.log(rowDiv);
+                cellDiv.id = cellCounter;
+                //// console.log(rowDiv);
                 console.log(cellDiv);
-                // cellDiv.textContent = _board[row][cell]; //todo functionality in markBoard?
                 rowDiv.appendChild(cellDiv);
+                cellCounter++;
             }
         }
     };
@@ -109,7 +111,7 @@ const gameboard = (() => {
     // todo logic to decide whether to accept click & make change to _board, gameboard.display()
     function markBoard(e) {
         e.target.textContent = 'X';
-        logClick(e);
+        //// logClick(e);
     };
     function returnBoard() {
         return boardSpace;
