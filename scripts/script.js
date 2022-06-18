@@ -1,50 +1,50 @@
 'use strict'
 
-const events = {
-    // * event.link('someEvent', someMethod)      // links event with relevant method into event:method pair
-    // * event.unlink('someEvent', someMethod)    // removes event:method pair
-    // * event.call('someEvent', someData)        // calls event:method pair with relevant data
+// const events = {
+//     // * event.link('someEvent', someMethod)      // links event with relevant method into event:method pair
+//     // * event.unlink('someEvent', someMethod)    // removes event:method pair
+//     // * event.call('someEvent', someData)        // calls event:method pair with relevant data
 
-    // data
-    _storedEvents: {
-        // stores key:value (event:handler) pairs 
-        // * 'someEvent': [someMethod, someOtherMethod, anotherMethod]
-    },
+//     // data
+//     _storedEvents: {
+//         // stores key:value (event:handler) pairs 
+//         // * 'someEvent': [someMethod, someOtherMethod, anotherMethod]
+//     },
 
-    // methods
-    link: function (eventName, fn) {
-    //             'someEvent', someMethod
-        // preserve key:method pair in _storedEvents OR create a new blank key:method pair
-        this._storedEvents[eventName] = this._storedEvents[eventName] || [];
-        // push someMethod to key 'someEvent'
-        this._storedEvents[eventName].push(fn);
-    },
-    unlink: function (eventName, fn) {
-    //               'someEvent', someMethod
-        // if key 'someEvent' exists...
-        if (this._storedEvents[eventName]) {
-            // for each method linked to key...
-            for (let i = 0; i < (this._storedEvents[eventName].length); i++) {
-                // if linked method === someMethod being called...
-                if (this[eventName][i] === fn) {
-                    // remove linked method from key
-                    this._storedEvents[eventName].splice(i, 1);
-                    break;
-                };
-            };
-        };
-    },
-    call: function (eventName, data) {
-    //            'someEvent', someMethod
-        // if key 'someEvent' exists...
-        if (this._storedEvents[eventName]) {
-            // call each linked method with the data provided
-            this._storedEvents[eventName].forEach(function(fn) {
-                fn(data);
-            });
-        };
-    }
-};
+//     // methods
+//     link: function (eventName, fn) {
+//     //             'someEvent', someMethod
+//         // preserve key:method pair in _storedEvents OR create a new blank key:method pair
+//         this._storedEvents[eventName] = this._storedEvents[eventName] || [];
+//         // push someMethod to key 'someEvent'
+//         this._storedEvents[eventName].push(fn);
+//     },
+//     unlink: function (eventName, fn) {
+//     //               'someEvent', someMethod
+//         // if key 'someEvent' exists...
+//         if (this._storedEvents[eventName]) {
+//             // for each method linked to key...
+//             for (let i = 0; i < (this._storedEvents[eventName].length); i++) {
+//                 // if linked method === someMethod being called...
+//                 if (this[eventName][i] === fn) {
+//                     // remove linked method from key
+//                     this._storedEvents[eventName].splice(i, 1);
+//                     break;
+//                 };
+//             };
+//         };
+//     },
+//     call: function (eventName, data) {
+//     //            'someEvent', someMethod
+//         // if key 'someEvent' exists...
+//         if (this._storedEvents[eventName]) {
+//             // call each linked method with the data provided
+//             this._storedEvents[eventName].forEach(function(fn) {
+//                 fn(data);
+//             });
+//         };
+//     }
+// };
 
 const gameboard = (() => {
     // data
@@ -60,11 +60,11 @@ const gameboard = (() => {
     // bind events
 
     // methods
-    const display = () => {
+    function display() {
         let rowDiv;
         let cellDiv;
         let cellCounter = 0;
-        for(let i = 0; i < 12; i++) {
+        for (let i = 0; i < 12; i++) {
             if ((i === 0) || (i%4 === 0)) {
                 rowDiv = document.createElement('div');
                 rowDiv.classList.add('row');
@@ -80,6 +80,21 @@ const gameboard = (() => {
             }
         }
     };
+    function clear() {
+        //// console.log(boardSpace);
+        let rowDiv;
+        let cellDiv;
+        for (let x = 0; x < 3; x++) {
+            rowDiv = boardSpace.children[x];
+            console.log(rowDiv);
+            for (let y = 0; y < 3; y++) {
+                cellDiv = rowDiv.children[y];
+                cellDiv.textContent = '';
+                boardArray[cellDiv.id] = '';
+            }
+        }
+        console.log(boardArray);
+    };
     function returnBoardSpace() {
         return boardSpace;
     };
@@ -90,6 +105,7 @@ const gameboard = (() => {
     // make public to global
     return {
         display,
+        clear,
         returnBoardSpace,
         returnBoardArray
     };
@@ -100,7 +116,7 @@ const playGame = (() => {
     let _currPlayer = 'X';
 
     // cache DOM
-    let board = gameboard.returnBoardArray();
+    let boardArray = gameboard.returnBoardArray();
     //// console.log(board);
 
     // bind events
@@ -134,8 +150,10 @@ const playGame = (() => {
     };
     function markBoard(e) {
         if (markValid(e) === true) {
-            e.target.textContent = 'X';
-            boardArray[e.target.id] = 'X';
+            console.log({_currPlayer});
+            e.target.textContent = _currPlayer[0];
+            boardArray[e.target.id] = _currPlayer[0];
+            switchPlayer();
 
             logClick(e);
             console.log(boardArray);
@@ -143,22 +161,6 @@ const playGame = (() => {
     };
     function markValid(e) {
         if (boardArray[e.target.id] === '') {
-            return true;
-        };
-    };
-    function markBoard(e) {
-        if (markValid(e) === true) {
-            console.log({_currPlayer});
-            e.target.textContent = _currPlayer[0];
-            board[e.target.id] = _currPlayer[0];
-            switchPlayer();
-
-            logClick(e);
-            console.log(board);
-        };
-    };
-    function markValid(e) {
-        if (board[e.target.id] === '') {
             return true;
         };
     };
@@ -229,6 +231,7 @@ const init = (() => {
     _restartButton.addEventListener('click', () => {
         unsetPlayers(_players); // ! WORKS
         playGame.removeClicks(boardSpace); // ! WORKS
+        gameboard.clear();
     });
 
     // methods
