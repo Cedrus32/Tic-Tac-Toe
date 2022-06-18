@@ -48,10 +48,10 @@ const events = {
 
 const gameboard = (() => {
     // data
-    let _board = ['', '', '',
-                  '', '', '',
-                  '', '', '',
-                 ];
+    let boardArray = ['', '', '',
+                      '', '', '',
+                      '', '', '',
+                     ];
     
     // cache DOM
     const boardSpace = document.getElementById('board-space');
@@ -80,6 +80,32 @@ const gameboard = (() => {
             }
         }
     };
+    function returnBoardSpace() {
+        return boardSpace;
+    };
+    function returnBoardArray() {
+        return boardArray;
+    };
+
+    // make public to global
+    return {
+        display,
+        returnBoardSpace,
+        returnBoardArray
+    };
+})();
+
+const playGame = (() => {
+    // data
+    let _currPlayer = 'X';
+
+    // cache DOM
+    let board = gameboard.returnBoardArray();
+    //// console.log(board);
+
+    // bind events
+
+    // methods
     function addClicks(board) {
         //// console.log(board);
         for (let x = 0; x < 3; x++) {
@@ -106,65 +132,29 @@ const gameboard = (() => {
             };
         };
     };
-    // todo logic to decide whether to accept click & make change to _board, gameboard.display()
     function markBoard(e) {
         if (markValid(e) === true) {
             e.target.textContent = 'X';
-            _board[e.target.id] = 'X';
+            boardArray[e.target.id] = 'X';
 
             logClick(e);
-            console.log(_board);
+            console.log(boardArray);
         };
     };
     function markValid(e) {
-        if (_board[e.target.id] === '') {
+        if (boardArray[e.target.id] === '') {
             return true;
         };
     };
-    function returnBoardSpace() {
-        return boardSpace;
-    };
-    function returnBoardArray() {
-        return _board;
-    }
-    function logClick(e) {
-        console.log(e.target);
-    };
-
-    // make public to global
-    return {
-        display,
-        addClicks,
-        removeClicks,
-        returnBoardSpace,
-        returnBoardArray
-    };
-})();
-
-const playGame = (() => {
-    // data
-
-    // cache DOM
-    let board = gameboard.returnBoardArray();
-    //// console.log(board);
-
-    // bind events
-    // ? on board click, make move --> check if legal
-    // ?                           --> mark gameboard
-    // ?                           --> clear gameboard
-    // ?                           --> display gameboard
-    // ?                 listen for win/loss/tie
-    // ?                 track turn
-    // ?                 update ticker
-
-    // methods
     function markBoard(e) {
         if (markValid(e) === true) {
-            e.target.textContent = 'X';
-            board[e.target.id] = 'X';
+            console.log({_currPlayer});
+            e.target.textContent = _currPlayer[0];
+            board[e.target.id] = _currPlayer[0];
+            switchPlayer();
 
             logClick(e);
-            console.log(_board);
+            console.log(board);
         };
     };
     function markValid(e) {
@@ -172,12 +162,23 @@ const playGame = (() => {
             return true;
         };
     };
+    function logClick(e) {
+        console.log(e.target);
+    };
+    function switchPlayer() {
+        if (_currPlayer === 'X') {
+            _currPlayer = 'O';
+        } else {
+            _currPlayer = 'X';
+        };
+    }
 
     // actions
     gameboard.display();
 
     return {
-        markBoard
+        addClicks,
+        removeClicks,
     }
 
 })();
@@ -208,7 +209,7 @@ function createPlayer(value) {
 const init = (() => {
     // data
     let _players = [];
-    let board = gameboard.returnBoardSpace();
+    let boardSpace = gameboard.returnBoardSpace();
 
     // cache DOM
     let _inputX = document.querySelector('div input#player-x');
@@ -222,12 +223,12 @@ const init = (() => {
     _startButton.addEventListener('click', () => {
         //// console.log(_inputX, _inputO);
         setPlayers(_inputX, _inputO); // ! WORKS
-        gameboard.addClicks(board); // ! WORKS
+        playGame.addClicks(boardSpace); // ! WORKS
     });
     // * addClick functionality in showGame()
     _restartButton.addEventListener('click', () => {
         unsetPlayers(_players); // ! WORKS
-        gameboard.removeClicks(board); // ! WORKS
+        playGame.removeClicks(boardSpace); // ! WORKS
     });
 
     // methods
