@@ -81,11 +81,10 @@ const playGame = (() => {
     let _xMarks = [];
     let _oMarks = [];
 
-    // let players = init.returnPlayers();
-    let _currPlayer = 0;
-    let _playerMark = '';
-    let _playerName = '';
     let players = [];
+    let _currPlayer = 0;
+    // let _playerMark = '';
+    // let _playerName = '';
 
     let _turnCounter = 0;
     let _tickerMessage = '';
@@ -174,7 +173,7 @@ const playGame = (() => {
             _winMatch = _wins[set].every(mark => playerMarks.includes(mark));
             console.log(_winMatch);
             if (_winMatch) {
-                // console.log(players[_currPlayer].returnName());
+                //// console.log(players[_currPlayer].returnName());
                 _tickerMessage = players[_currPlayer].returnName() + ' wins!';
                 updateTicker(_tickerMessage);
                 break;
@@ -203,6 +202,12 @@ const playGame = (() => {
     };
     function getPlayers(array) {
         players = array;
+    };
+    function setTicker() {
+        _ticker.textContent = players[_currPlayer].returnName() + "'s turn...";
+    }
+    function clearTicker() {
+        _ticker.textContent = '';
     }
 
     // actions
@@ -212,7 +217,9 @@ const playGame = (() => {
     return {
         addClicks,      // used by init click event
         removeClicks,   // used by init click event
-        getPlayers      // used by init click event
+        getPlayers,     // used by init click event
+        setTicker,      // used by init click event
+        clearTicker     // used by init click event
     }
 
 })();
@@ -266,12 +273,14 @@ const init = (() => {
     _startButton.addEventListener('click', () => {
         //// console.log(_inputX, _inputO);
         setPlayers(_inputX, _inputO); // ! WORKS
-        playGame.addClicks(boardSpace); // ! WORKS
         playGame.getPlayers(players);
+        playGame.setTicker();
+        playGame.addClicks(boardSpace); // ! WORKS
     });
     // * addClick functionality in showGame()
     _restartButton.addEventListener('click', () => {
         unsetPlayers(players); // ! WORKS
+        playGame.clearTicker();
         playGame.removeClicks(boardSpace); // ! WORKS
         gameboard.clear();
     });
