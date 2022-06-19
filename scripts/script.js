@@ -11,8 +11,6 @@ const gameboard = (() => {
     const boardSpace = document.getElementById('board-space');
     //// console.log({_cells});
 
-    // bind events
-
     // methods
     function display() {
         let rowDiv;
@@ -83,8 +81,8 @@ const playGame = (() => {
 
     let players = [];
     let _currPlayer = 0;
-    // let _playerMark = '';
-    // let _playerName = '';
+    //// let _playerMark = '';
+    //// let _playerName = '';
 
     let _turnCounter = 0;
     let _tickerMessage = '';
@@ -93,8 +91,6 @@ const playGame = (() => {
     // cache DOM
     const _ticker = document.querySelector('#game-container h3');
     //// console.log(_ticker);
-
-    // bind events
 
     // methods
     function addClicks(board) {
@@ -262,20 +258,26 @@ const init = (() => {
     let boardSpace = gameboard.returnBoardSpace();
 
     // cache DOM
-    let _inputX = document.querySelector('div input#X');
-    let _inputO = document.querySelector('div input#O');
-    let _labelX = _inputX.nextElementSibling;
-    let _labelO = _inputO.nextElementSibling;
     const _startButton = document.getElementById('start');
     const _restartButton = document.getElementById('restart');
+    const _form = document.querySelector('form.set-players');
+    //// console.log(_form);
+    let _inputX = document.querySelector('input#X');
+    let _inputO = document.querySelector('input#O');
+    let _labelX = _inputX.nextElementSibling;
+    let _labelO = _inputO.nextElementSibling;
 
     // bind listeners
     _startButton.addEventListener('click', () => {
         //// console.log(_inputX, _inputO);
-        setPlayers(_inputX, _inputO); // ! WORKS
-        playGame.getPlayers(players);
-        playGame.setTicker();
-        playGame.addClicks(boardSpace); // ! WORKS
+        if (_form.checkValidity() === true) {
+            setPlayers(_inputX, _inputO); // ! WORKS
+            playGame.getPlayers(players);
+            playGame.setTicker();
+            playGame.addClicks(boardSpace); // ! WORKS   
+        } else {
+            console.log('missing value');
+        }
     });
     // * addClick functionality in showGame()
     _restartButton.addEventListener('click', () => {
@@ -346,6 +348,6 @@ const init = (() => {
 
     // make public to global
     return {
-        returnPlayers   // unused
+        returnPlayers   // unused (qc)
     }
 })();
