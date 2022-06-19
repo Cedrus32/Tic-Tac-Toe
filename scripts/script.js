@@ -58,10 +58,10 @@ const gameboard = (() => {
 
     // make public to global
     return {
-        display,
-        clear,
-        returnBoardSpace,
-        returnBoardArray
+        display,            // used by playGame actions
+        clear,              // used by init click event
+        returnBoardSpace,   // used by init data
+        returnBoardArray    // used by playGame data
     };
 })();
 
@@ -76,15 +76,24 @@ const playGame = (() => {
                    ['0', '4', '8'],
                    ['2', '4', '6'],
                   ];
+    let boardArray = gameboard.returnBoardArray();
     let _winMatch;
     let _xMarks = [];
     let _oMarks = [];
-    let _currPlayer = 'X';
-    let turnCounter = 0;
-    let boardArray = gameboard.returnBoardArray();
+
+    // let players = init.returnPlayers();
+    let _currPlayer = 0;
+    let _playerMark = '';
+    let _playerName = '';
+    let players = [];
+
+    let _turnCounter = 0;
+    let _tickerMessage = '';
     //// console.log(boardArray);
 
     // cache DOM
+    const _ticker = document.querySelector('#game-container h3');
+    //// console.log(_ticker);
 
     // bind events
 
@@ -114,31 +123,33 @@ const playGame = (() => {
                 //// console.log('click removed');
             };
         };
-        // turnCounter = 0; //? add later if does not re-initialize on restart
     };
     function markBoard(e) {
         if (markValid(e) === true) {
-            turnCounter++;
+            _turnCounter++;
             //// console.log({_currPlayer});
-            e.target.textContent = _currPlayer[0];
-            boardArray[e.target.id] = _currPlayer[0];
+            e.target.textContent = players[_currPlayer].returnMark();
+            boardArray[e.target.id] = players[_currPlayer].returnMark();
 
-            if (_currPlayer === 'X') {
+            if (players[_currPlayer].returnMark() === 'X') {
                 _xMarks.push(e.target.id);
             } else {
                 _oMarks.push(e.target.id);
             };
-            if (turnCounter >= 5) {
-                if (_currPlayer === 'X') {
+            if (_turnCounter >= 5) {
+                if (players[_currPlayer].returnMark() === 'X') {
                     checkWin(_xMarks);
                 } else {
                     checkWin(_oMarks);
                 }
-                if ((turnCounter === 9) && (!_winMatch)) {
+                if ((_turnCounter === 9) && (!_winMatch)) {
                     console.log('tie');
+                    //todo link into ticker
                 }
             };
-            switchPlayer();
+            if (!_winMatch) {
+                switchPlayer();
+            }
 
             logClick(e);
             //// console.log(boardArray);
@@ -163,32 +174,53 @@ const playGame = (() => {
             _winMatch = _wins[set].every(mark => playerMarks.includes(mark));
             console.log(_winMatch);
             if (_winMatch) {
-                console.log(_currPlayer + ' wins!');
+                // console.log(players[_currPlayer].returnName());
+                _tickerMessage = players[_currPlayer].returnName() + ' wins!';
+                updateTicker(_tickerMessage);
                 break;
             }
         };
     };
+    function updateTicker() {
+        _ticker.textContent = _tickerMessage;
+    };
     function switchPlayer() {
-        if (_currPlayer === 'X') {
-            _currPlayer = 'O';
+        //// console.log(playGamePlayers);
+        //// playGamePlayers[0].displayPlayer();
+        //// playGamePlayers[1].displayPlayer();
+
+        if (players[_currPlayer].returnMark() === 'X') {
+            //// console.log(_currPlayer);
+            _currPlayer = 1;
+            _tickerMessage = players[_currPlayer].returnName() + "'s turn...";
+            updateTicker(_tickerMessage);
         } else {
-            _currPlayer = 'X';
+            //// console.log(_currPlayer);
+            _currPlayer = 0;
+            _tickerMessage = players[_currPlayer].returnName() + "'s turn...";
+            updateTicker(_tickerMessage);
         };
     };
+    function getPlayers(array) {
+        players = array;
+    }
 
     // actions
     gameboard.display();
 
+    // make public to global
     return {
-        addClicks,
-        removeClicks
+        addClicks,      // used by init click event
+        removeClicks,   // used by init click event
+        getPlayers      // used by init click event
     }
 
 })();
 
-function createPlayer(value) {
+function createPlayer(name, mark) {
     // data
-    let _name = value;
+    let _name = name;
+    let _mark = mark;
 
     // methods
     function returnName() {
@@ -196,27 +228,35 @@ function createPlayer(value) {
     };
     function displayName() {
         console.log(_name);
-    }
+    };
+    function displayMark() {
+        console.log(_mark);
+    };
+    function returnMark() {
+        return _mark;
+    };
     function savePlayer(saveState) {
         saveState.push(this);
     };
 
     // make public to global
     return {
-        returnName,
-        displayName,
-        savePlayer
+        returnName,     // unused (qc)
+        displayName,    // unused (qc)
+        returnMark,     // unused (qc)
+        displayMark,    // unused (qc)
+        savePlayer      // used by init (click event -> setPlayers)
     };
 };
 
 const init = (() => {
     // data
-    let _players = [];
+    let players = [];
     let boardSpace = gameboard.returnBoardSpace();
 
     // cache DOM
-    let _inputX = document.querySelector('div input#player-x');
-    let _inputO = document.querySelector('div input#player-o');
+    let _inputX = document.querySelector('div input#X');
+    let _inputO = document.querySelector('div input#O');
     let _labelX = _inputX.nextElementSibling;
     let _labelO = _inputO.nextElementSibling;
     const _startButton = document.getElementById('start');
@@ -227,10 +267,11 @@ const init = (() => {
         //// console.log(_inputX, _inputO);
         setPlayers(_inputX, _inputO); // ! WORKS
         playGame.addClicks(boardSpace); // ! WORKS
+        playGame.getPlayers(players);
     });
     // * addClick functionality in showGame()
     _restartButton.addEventListener('click', () => {
-        unsetPlayers(_players); // ! WORKS
+        unsetPlayers(players); // ! WORKS
         playGame.removeClicks(boardSpace); // ! WORKS
         gameboard.clear();
     });
@@ -238,16 +279,18 @@ const init = (() => {
     // methods
     function setPlayers(inputX, inputO) {
         // create players
-        let _playerX = createPlayer(inputX.value);
-        let _playerO = createPlayer(inputO.value);
+        let _playerX = createPlayer(inputX.value, inputX.id);
+        let _playerO = createPlayer(inputO.value, inputO.id);
         // save players
-        _playerX.savePlayer(_players);
-        _playerO.savePlayer(_players);
-        // toggle input/label to show player names
+        _playerX.savePlayer(players);
+        _playerO.savePlayer(players);
+        // console.log(players);
         showName(_labelX, _inputX);
         showName(_labelO, _inputO);
-        //// _playerX.displayName();
-        //// _playerO.displayName();
+        //// players[0].displayName();
+        //// players[1].displayName();
+        //// players[0].displayPlayer();
+        //// players[1].displayPlayer();
     };
     function showName(target, source) {
         // target === label
@@ -288,4 +331,12 @@ const init = (() => {
     function clearInput(input) {
         input.value = '';
     };
+    function returnPlayers() {
+        return players;
+    }
+
+    // make public to global
+    return {
+        returnPlayers   // unused
+    }
 })();
