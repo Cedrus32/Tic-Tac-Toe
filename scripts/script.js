@@ -272,25 +272,30 @@ const init = (() => {
     let _labelO = _inputO.nextElementSibling;
 
     // bind listeners
-    _inputX.addEventListener('keydown', (e) => {
-        if (e.target.validity.customError) {
-            removeError(e.target);
-        };
-    });
-    _inputO.addEventListener('keydown', (e) => {
-        if (e.target.validity.customError) {
-            removeError(e.target);
-        };
-    });
+    // _inputX.addEventListener('keydown', (e) => {
+    //     console.log(e);
+    //     if (e.target.validity.customError) {
+    //         removeError(e.target);
+    //     };
+    // });
+    // _inputO.addEventListener('keydown', (e) => {
+    //     console.log(e);
+    //     if (e.target.validity.customError) {
+    //         removeError(e.target);
+    //     };
+    // });
     _startButton.addEventListener('click', () => {
-        console.log(_form.checkValidity());
+        //// console.log(_form.checkValidity());
+        ////// console.log(_inputX.checkValidity());
+        // console.log(_inputO.checkValidity());
+        checkErrors(_inputX);
+        checkErrors(_inputO);
         if (_form.checkValidity() === true) {
             setPlayers(_inputX, _inputO);
+            //// console.log(players);
             playGame.getPlayers(players);
             playGame.setTicker();
             playGame.addClicks(boardSpace);  
-        } else if (!(_inputX.validity.customError) || !(_inputO.validity.customError)) {
-            throwError();
         };
     });
     _restartButton.addEventListener('click', () => {
@@ -301,6 +306,34 @@ const init = (() => {
     });
 
     // methods
+    function checkErrors(input) {
+        // input no value && no previous error...
+        if ((!input.value) && (!input.validity.customError)) {
+            createError(input);
+        // input has value && input has previous error...
+        } else if ((input.value) && (input.validity.customError)) {
+            removeError(input);
+            let label = input.nextElementSibling;
+            console.log(label);
+            showName(label, input);
+        };
+    };
+    function createError(input) {
+        //// console.log(input.id);
+        //// console.log(input.parentElement);
+        //// console.log(input.nextElementSibling);
+        input.setCustomValidity('Player ' + input.id + ' name?');
+        //// console.log({input});
+        let errorDiv = document.createElement('div');
+        input.parentElement.insertBefore(errorDiv, input.nextElementSibling);
+        errorDiv.textContent = input.validationMessage;
+    };
+    function removeError(input) {
+        //// console.log({input});
+        let errorDiv = input.nextElementSibling;
+        input.setCustomValidity('');
+        errorDiv.remove();
+    };
     function setPlayers(inputX, inputO) {
         // create players
         let _playerX = createPlayer(inputX.value, inputX.id);
@@ -309,8 +342,8 @@ const init = (() => {
         _playerX.savePlayer(players);
         _playerO.savePlayer(players);
         // console.log(players);
-        showName(_labelX, _inputX);
-        showName(_labelO, _inputO);
+        //// showName(_labelX, _inputX);
+        //// showName(_labelO, _inputO);
         players[0].displayName();
         players[0].displayMark();
         players[1].displayName();
@@ -357,30 +390,6 @@ const init = (() => {
     };
     function returnPlayers() {
         return players;
-    };
-    function throwError() {
-        if (_inputX.checkValidity() === false) {
-            createError(_inputX);
-        };
-        if (_inputO.checkValidity() === false) {
-            createError(_inputO);
-        };
-    };
-    function createError(input) {
-        //// console.log(input.id);
-        //// console.log(input.parentElement);
-        //// console.log(input.nextElementSibling);
-        input.setCustomValidity('Player ' + input.id + ' name?');
-        //// console.log({input});
-        let errorDiv = document.createElement('div');
-        input.parentElement.insertBefore(errorDiv, input.nextElementSibling);
-        errorDiv.textContent = input.validationMessage;
-    };
-    function removeError(input) {
-        //// console.log({input});
-        let errorDiv = input.nextElementSibling;
-        input.setCustomValidity('');
-        errorDiv.remove();
     };
 
     // make public to global
