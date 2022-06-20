@@ -271,19 +271,20 @@ const init = (() => {
     _startButton.addEventListener('click', () => {
         //// console.log(_inputX, _inputO);
         if (_form.checkValidity() === true) {
-            setPlayers(_inputX, _inputO); // ! WORKS
+            // remove custom errors, if they exist
+            setPlayers(_inputX, _inputO);
             playGame.getPlayers(players);
             playGame.setTicker();
-            playGame.addClicks(boardSpace); // ! WORKS   
+            playGame.addClicks(boardSpace);  
         } else {
-            console.log('missing value');
+            throwError();
         }
     });
     // * addClick functionality in showGame()
     _restartButton.addEventListener('click', () => {
-        unsetPlayers(players); // ! WORKS
+        unsetPlayers(players);
         playGame.clearTicker();
-        playGame.removeClicks(boardSpace); // ! WORKS
+        playGame.removeClicks(boardSpace);
         gameboard.clear();
     });
 
@@ -344,7 +345,28 @@ const init = (() => {
     };
     function returnPlayers() {
         return players;
+    };
+    function throwError() {
+        if (_inputX.checkValidity() === false) {
+            createError(_inputX);
+        };
+        if (_inputO.checkValidity() === false) {
+            createError(_inputO);
+        };
+    };
+    function createError(input) {
+        //// console.log(input.id);
+        //// console.log(input.parentElement);
+        //// console.log(input.nextElementSibling);
+        input.setCustomValidity('Player ' + input.id + ' name?');
+        //// console.log({input});
+        let errorDiv = document.createElement('div');
+        input.parentElement.insertBefore(errorDiv, input.nextElementSibling);
+        errorDiv.textContent = input.validationMessage;
     }
+    // function removeError() {
+
+    // };
 
     // make public to global
     return {
