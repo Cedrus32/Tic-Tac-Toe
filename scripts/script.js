@@ -268,6 +268,16 @@ const init = (() => {
     let _labelO = _inputO.nextElementSibling;
 
     // bind listeners
+    _inputX.addEventListener('keydown', (e) => {
+        if (e.target.validationMessage !== '') {
+            removeError(e.target);
+        };
+    });
+    _inputO.addEventListener('keydown', (e) => {
+        if (e.target.validationMessage !== '') {
+            removeError(e.target);
+        };
+    });
     _startButton.addEventListener('click', () => {
         //// console.log(_inputX, _inputO);
         if (_form.checkValidity() === true) {
@@ -280,7 +290,6 @@ const init = (() => {
             throwError();
         }
     });
-    // * addClick functionality in showGame()
     _restartButton.addEventListener('click', () => {
         unsetPlayers(players);
         playGame.clearTicker();
@@ -364,9 +373,12 @@ const init = (() => {
         input.parentElement.insertBefore(errorDiv, input.nextElementSibling);
         errorDiv.textContent = input.validationMessage;
     }
-    // function removeError() {
-
-    // };
+    function removeError(input) {
+        console.log({input});
+        let errorDiv = input.nextElementSibling;
+        input.setCustomValidity('');
+        errorDiv.remove();
+    };
 
     // make public to global
     return {
