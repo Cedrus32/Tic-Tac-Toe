@@ -9,7 +9,6 @@ const gameboard = (() => {
     
     // cache DOM
     const boardSpace = document.getElementById('board-space');
-    //// console.log({_cells});
 
     // methods
     function display() {
@@ -20,32 +19,26 @@ const gameboard = (() => {
             if ((i === 0) || (i%4 === 0)) {
                 rowDiv = document.createElement('div');
                 rowDiv.classList.add('row');
-                //// console.log(rowDiv);
                 boardSpace.appendChild(rowDiv);
             } else {
                 cellDiv = document.createElement('div');
                 cellDiv.id = cellCounter;
-                //// console.log(rowDiv);
-                console.log(cellDiv);
                 rowDiv.appendChild(cellDiv);
                 cellCounter++;
-            }
-        }
+            };
+        };
     };
     function clear() {
-        //// console.log(boardSpace);
         let rowDiv;
         let cellDiv;
         for (let x = 0; x < 3; x++) {
             rowDiv = boardSpace.children[x];
-            console.log(rowDiv);
             for (let y = 0; y < 3; y++) {
                 cellDiv = rowDiv.children[y];
                 cellDiv.textContent = '';
                 boardArray[cellDiv.id] = '';
-            }
-        }
-        console.log(boardArray);
+            };
+        };
     };
     function returnBoardSpace() {
         return boardSpace;
@@ -83,48 +76,35 @@ const playGame = (() => {
 
     let players = [];
     let _currPlayer = 0;
-    //// let _playerMark = '';
-    //// let _playerName = '';
 
     let _turnCounter = 0;
     let _tickerMessage = '';
-    //// console.log(boardArray);
 
     // cache DOM
     const _ticker = document.querySelector('#game-container h3');
-    //// console.log(_ticker);
 
     // methods
     function addClicks(board) {
-        //// console.log(board);
         for (let x = 0; x < 3; x++) {
             let row = board.children[x];
-            //// console.log(row);
             for (let y = 0; y < 3; y++) {
                 let cell = row.children[y]
-                //// console.log (cell);
                 cell.addEventListener('click', markBoard);
-                //// console.log('click added');
             };
         };
     };
     function removeClicks(board) {
-        //// console.log(board);
         for (let x = 0; x < 3; x++) {
             let row = board.children[x];
-            //// console.log(row);
             for (let y = 0; y < 3; y++) {
                 let cell = row.children[y];
-                //// console.log (cell);
                 cell.removeEventListener('click', markBoard);
-                //// console.log('click removed');
             };
         };
     };
     function markBoard(e) {
         if (markValid(e) === true) {
             _turnCounter++;
-            //// console.log({_currPlayer});
             e.target.textContent = players[_currPlayer].returnMark();
             boardArray[e.target.id] = players[_currPlayer].returnMark();
 
@@ -140,17 +120,13 @@ const playGame = (() => {
                     checkWin(_oMarks);
                 };
                 if ((_turnCounter === 9) && (!_winMatch)) {
-                    console.log('tie');
                     _tickerMessage = "It's a tie.";
                     updateTicker(_tickerMessage);
                 };
             };
             if ((!_winMatch) && (_turnCounter < 9)) {
                 switchPlayer();
-            }
-
-            logClick(e);
-            //// console.log(boardArray);
+            };
         };
     };
     function markValid(e) {
@@ -158,43 +134,27 @@ const playGame = (() => {
             return true;
         };
     };
-    function logClick(e) {
-        console.log(e.target);
-    };
     function checkWin(playerMarks) {
-        //// console.log(boardArray);
-        //// console.log(_xMarks);
-        //// console.log(_oMarks);
         playerMarks.sort();
         for (let set in _wins) {
-            console.log(_wins[set]);
-            console.log(playerMarks);
             _winMatch = _wins[set].every(mark => playerMarks.includes(mark));
-            console.log(_winMatch);
             if (_winMatch) {
-                //// console.log(players[_currPlayer].returnName());
                 _tickerMessage = players[_currPlayer].returnName() + ' wins!';
                 updateTicker(_tickerMessage);
                 removeClicks(boardSpace);
                 break;
-            }
+            };
         };
     };
     function updateTicker() {
         _ticker.textContent = _tickerMessage;
     };
     function switchPlayer() {
-        //// console.log(playGamePlayers);
-        //// playGamePlayers[0].displayPlayer();
-        //// playGamePlayers[1].displayPlayer();
-
         if (players[_currPlayer].returnMark() === 'X') {
-            //// console.log(_currPlayer);
             _currPlayer = 1;
             _tickerMessage = players[_currPlayer].returnName() + "'s turn...";
             updateTicker(_tickerMessage);
         } else {
-            //// console.log(_currPlayer);
             _currPlayer = 0;
             _tickerMessage = players[_currPlayer].returnName() + "'s turn...";
             updateTicker(_tickerMessage);
@@ -265,34 +225,17 @@ const init = (() => {
     const _startButton = document.getElementById('start');
     const _restartButton = document.getElementById('restart');
     const _form = document.querySelector('form.set-players');
-    //// console.log(_form);
     let _inputX = document.querySelector('input#X');
     let _inputO = document.querySelector('input#O');
     let _labelX = _inputX.nextElementSibling;
     let _labelO = _inputO.nextElementSibling;
 
     // bind listeners
-    // _inputX.addEventListener('keydown', (e) => {
-    //     console.log(e);
-    //     if (e.target.validity.customError) {
-    //         removeError(e.target);
-    //     };
-    // });
-    // _inputO.addEventListener('keydown', (e) => {
-    //     console.log(e);
-    //     if (e.target.validity.customError) {
-    //         removeError(e.target);
-    //     };
-    // });
     _startButton.addEventListener('click', () => {
-        //// console.log(_form.checkValidity());
-        ////// console.log(_inputX.checkValidity());
-        // console.log(_inputO.checkValidity());
         checkErrors(_inputX);
         checkErrors(_inputO);
         if (_form.checkValidity() === true) {
             setPlayers(_inputX, _inputO);
-            //// console.log(players);
             playGame.getPlayers(players);
             playGame.setTicker();
             playGame.addClicks(boardSpace);  
@@ -314,22 +257,16 @@ const init = (() => {
         } else if ((input.value) && (input.validity.customError)) {
             removeError(input);
             let label = input.nextElementSibling;
-            console.log(label);
             showName(label, input);
         };
     };
     function createError(input) {
-        //// console.log(input.id);
-        //// console.log(input.parentElement);
-        //// console.log(input.nextElementSibling);
         input.setCustomValidity('Player ' + input.id + ' name?');
-        //// console.log({input});
         let errorDiv = document.createElement('div');
         input.parentElement.insertBefore(errorDiv, input.nextElementSibling);
         errorDiv.textContent = input.validationMessage;
     };
     function removeError(input) {
-        //// console.log({input});
         let errorDiv = input.nextElementSibling;
         input.setCustomValidity('');
         errorDiv.remove();
@@ -341,13 +278,6 @@ const init = (() => {
         // save players
         _playerX.savePlayer(players);
         _playerO.savePlayer(players);
-        // console.log(players);
-        //// showName(_labelX, _inputX);
-        //// showName(_labelO, _inputO);
-        players[0].displayName();
-        players[0].displayMark();
-        players[1].displayName();
-        players[1].displayMark();
     };
     function showName(target, source) {
         // target === label
@@ -355,14 +285,14 @@ const init = (() => {
         target.textContent = source.value;
         if (source.classList.length === 0) {
             hideElement(source); // hides input
-        }
+        };
         showElement(target); // shows label
     };
     function unsetPlayers(players) {
         // delete players
         for (let i = 0; i < 2; i++) {
             players.pop();
-        }
+        };
         // clear inputs
         clearInput(_inputX);
         clearInput(_inputO);
