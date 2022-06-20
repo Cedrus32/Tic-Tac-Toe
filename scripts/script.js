@@ -58,7 +58,7 @@ const gameboard = (() => {
     return {
         display,            // used by playGame actions
         clear,              // used by init click event
-        returnBoardSpace,   // used by init data
+        returnBoardSpace,   // used by init & playGame data
         returnBoardArray    // used by playGame data
     };
 })();
@@ -138,13 +138,14 @@ const playGame = (() => {
                     checkWin(_xMarks);
                 } else {
                     checkWin(_oMarks);
-                }
+                };
                 if ((_turnCounter === 9) && (!_winMatch)) {
                     console.log('tie');
-                    //todo link into ticker
-                }
+                    _tickerMessage = "It's a tie.";
+                    updateTicker(_tickerMessage);
+                };
             };
-            if (!_winMatch) {
+            if ((!_winMatch) && (_turnCounter < 9)) {
                 switchPlayer();
             }
 
