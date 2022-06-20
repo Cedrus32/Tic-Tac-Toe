@@ -75,6 +75,8 @@ const playGame = (() => {
                    ['2', '4', '6'],
                   ];
     let boardArray = gameboard.returnBoardArray();
+    let boardSpace = gameboard.returnBoardSpace();
+
     let _winMatch;
     let _xMarks = [];
     let _oMarks = [];
@@ -172,6 +174,7 @@ const playGame = (() => {
                 //// console.log(players[_currPlayer].returnName());
                 _tickerMessage = players[_currPlayer].returnName() + ' wins!';
                 updateTicker(_tickerMessage);
+                removeClicks(boardSpace);
                 break;
             }
         };
@@ -371,7 +374,7 @@ const init = (() => {
         let errorDiv = document.createElement('div');
         input.parentElement.insertBefore(errorDiv, input.nextElementSibling);
         errorDiv.textContent = input.validationMessage;
-    }
+    };
     function removeError(input) {
         //// console.log({input});
         let errorDiv = input.nextElementSibling;
