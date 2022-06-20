@@ -269,26 +269,25 @@ const init = (() => {
 
     // bind listeners
     _inputX.addEventListener('keydown', (e) => {
-        if (e.target.validationMessage !== '') {
+        if (e.target.validity.customError) {
             removeError(e.target);
         };
     });
     _inputO.addEventListener('keydown', (e) => {
-        if (e.target.validationMessage !== '') {
+        if (e.target.validity.customError) {
             removeError(e.target);
         };
     });
     _startButton.addEventListener('click', () => {
-        //// console.log(_inputX, _inputO);
+        console.log(_form.checkValidity());
         if (_form.checkValidity() === true) {
-            // remove custom errors, if they exist
             setPlayers(_inputX, _inputO);
             playGame.getPlayers(players);
             playGame.setTicker();
             playGame.addClicks(boardSpace);  
-        } else {
+        } else if (!(_inputX.validity.customError) || !(_inputO.validity.customError)) {
             throwError();
-        }
+        };
     });
     _restartButton.addEventListener('click', () => {
         unsetPlayers(players);
@@ -308,10 +307,10 @@ const init = (() => {
         // console.log(players);
         showName(_labelX, _inputX);
         showName(_labelO, _inputO);
-        //// players[0].displayName();
-        //// players[1].displayName();
-        //// players[0].displayPlayer();
-        //// players[1].displayPlayer();
+        players[0].displayName();
+        players[0].displayMark();
+        players[1].displayName();
+        players[1].displayMark();
     };
     function showName(target, source) {
         // target === label
@@ -374,7 +373,7 @@ const init = (() => {
         errorDiv.textContent = input.validationMessage;
     }
     function removeError(input) {
-        console.log({input});
+        //// console.log({input});
         let errorDiv = input.nextElementSibling;
         input.setCustomValidity('');
         errorDiv.remove();
