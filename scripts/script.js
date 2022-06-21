@@ -194,7 +194,7 @@ const playGame = (() => {
                 _xMarks.push(e.target.id);
                 console.log('_xMarks: ' + _xMarks);
                 if (gameMode === 'ai') {
-                    availMoves.splice(availMoves.indexOf(e.target.id), 1);
+                    updateAvailMoves(e.target.id);
                     console.log('availMoves: ' + availMoves);
                 };
             } else {
@@ -210,7 +210,7 @@ const playGame = (() => {
                 computer.markBoard(computerMove);
                 _oMarks.push(computerMove);
                 console.log('_oMarks: ' + _oMarks);
-                availMoves.splice(availMoves.indexOf(computerMove), 1);
+                updateAvailMoves(computerMove);
                 console.log('availMoves: ' + availMoves);
                 console.log('');
             };
@@ -232,6 +232,9 @@ const playGame = (() => {
             };
         };
     };
+    function updateAvailMoves(move) {
+        availMoves.splice(availMoves.indexOf(move), 1);
+    }
     function markValid(e) {
         if (boardArray[e.target.id] === '') {
             return true;
