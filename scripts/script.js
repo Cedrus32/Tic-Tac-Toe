@@ -60,6 +60,7 @@ const computer = (() => {
     // data
     let availMoves = [];
     let boardArray = gameboard.returnBoardArray();
+    const boardSpace = gameboard.returnBoardSpace();
 
     // cache DOM
 
@@ -75,29 +76,43 @@ const computer = (() => {
         for (let i = 0; i < (boardArray.length); i++) {
             if (boardArray[i].length === 0) {
                 // console.log(i);
-                availMoves.push(i);
+                // ??? parse int to string ???
+                let move = i.toString();
+                availMoves.push(move);
             };
         };
-        console.log(availMoves);
+        console.log('availMoves: ' + availMoves);
     };
     function selectMove() {
-        console.log('selectMove()');
+        console.log('selectMove()...');
         let validMove = false;
         let n;
+        let move;
 
+        // ! get loop to identify move in availMoves
         while (validMove === false) {
-            n = Math.floor(Math.random() * 10);
-            if (availMoves.includes(n)) {
-                let i = availMoves.indexOf(n);
-                availMoves.splice(i, 1);
+            n = Math.floor(Math.random() * 9);
+            move = n.toString();
+            console.log({move});
+            if (availMoves.includes(move)) {
                 validMove = true;
             };
         };
-        
-        console.log('computer moves to ' + n)
-        console.log(availMoves);
 
-        return n;
+        return move;
+    };
+    function markBoard(move) {
+        console.log('computer.markBoard()...')
+        for (let x = 0; x < 3; x++) {
+            let row = boardSpace.children[x];
+            for (let y = 0; y < 3; y++) {
+                let cell = row.children[y];
+                if (cell.id === move) {
+                    console.log('cell: cell[' + cell.id + ']');
+                    cell.textContent = 'O';
+                };
+            };
+        };
     };
 
     //actions
@@ -106,7 +121,8 @@ const computer = (() => {
     return {
         returnAvailMoves,   // used by playGame data
         getAvailMoves,      // used by playGame -> markBoard
-        selectMove          // used by playGame -> markBoard
+        selectMove,         // used by playGame -> markBoard
+        markBoard           // used by playGame -> markBoard
     };
 })();
 
@@ -167,31 +183,36 @@ const playGame = (() => {
         if (markValid(e) === true) {
             // count human turn
             _turnCounter++;
+
+            // * mark board & update boardArray with human move
+            console.log('human selects...')
             e.target.textContent = players[_currPlayer].returnMark();
             boardArray[e.target.id] = players[_currPlayer].returnMark();
 
             // mark human moves
             if (players[_currPlayer].returnMark() === 'X') {
-                // log X mark
                 _xMarks.push(e.target.id);
+                console.log('_xMarks: ' + _xMarks);
                 if (gameMode === 'ai') {
-                    // update availMoves for computer
-                    //// console.log('e.target.id: ' + e.target.id);
-                    //// console.log('type of id: ' + typeof(e.target.id));
-                    //// console.log('index of e.target.id in availMoves: ' + availMoves.indexOf(parseInt(e.target.id)));
-                    availMoves.splice(availMoves.indexOf(parseInt(e.target.id)), 1);
+                    availMoves.splice(availMoves.indexOf(e.target.id), 1);
+                    console.log('availMoves: ' + availMoves);
                 };
             } else {
-                // log O mark
                 _oMarks.push(e.target.id);
             };
-            if (gameMode === 'ai') {
-                // count computer turn
+            if ((gameMode === 'ai') && (_turnCounter < 9)) {
                 _turnCounter++;
 
-                // mark/log computer move
-                _oMarks.push(computer.selectMove());
-                //// console.log(_oMarks);
+                // * mark board & update boardArray with computer move
+                console.log('computer selects...')
+                let computerMove = computer.selectMove();
+                console.log('computerMove: ' + computerMove);
+                computer.markBoard(computerMove);
+                _oMarks.push(computerMove);
+                console.log('_oMarks: ' + _oMarks);
+                availMoves.splice(availMoves.indexOf(computerMove), 1);
+                console.log('availMoves: ' + availMoves);
+                console.log('');
             };
             if (_turnCounter >= 5) {
                 if (players[_currPlayer].returnMark() === 'X') {
