@@ -75,8 +75,6 @@ const computer = (() => {
         // if boardArray cell.length === 0, push that index to _availMoves
         for (let i = 0; i < (boardArray.length); i++) {
             if (boardArray[i].length === 0) {
-                // console.log(i);
-                // ??? parse int to string ???
                 let move = i.toString();
                 availMoves.push(move);
             };
@@ -89,7 +87,6 @@ const computer = (() => {
         let n;
         let move;
 
-        // ! get loop to identify move in availMoves
         while (validMove === false) {
             n = Math.floor(Math.random() * 9);
             move = n.toString();
@@ -151,13 +148,15 @@ const playGame = (() => {
     let _turnCounter = 0;
     let _tickerMessage = '';
 
-    //// let gameMode = 'human';
-    let gameMode = 'ai';
+    let gameMode = '';
 
     // cache DOM
     const _ticker = document.querySelector('#game-container h3');
 
     // methods
+    function getGameMode(mode) {
+        gameMode = mode;
+    }
     function addClicks(board) {
         for (let x = 0; x < 3; x++) {
             let row = board.children[x];
@@ -177,7 +176,8 @@ const playGame = (() => {
         };
     };
     function markBoard(e) {
-        if (_turnCounter === 0) {
+        console.log(gameMode);
+        if ((gameMode === 'ai') && (_turnCounter === 0)) {
             computer.getAvailMoves();
         };
         if (markValid(e) === true) {
@@ -200,6 +200,7 @@ const playGame = (() => {
             } else {
                 _oMarks.push(e.target.id);
             };
+            // select & mark computer moves
             if ((gameMode === 'ai') && (_turnCounter < 9)) {
                 _turnCounter++;
 
@@ -214,6 +215,7 @@ const playGame = (() => {
                 console.log('availMoves: ' + availMoves);
                 console.log('');
             };
+            // check for wins
             if (_turnCounter >= 5) {
                 if (players[_currPlayer].returnMark() === 'X') {
                     checkWin(_xMarks);
@@ -225,6 +227,7 @@ const playGame = (() => {
                     updateTicker(_tickerMessage);
                 };
             };
+            // switch human player
             if (gameMode === 'human') {
                 if ((!_winMatch) && (_turnCounter < 9)) {
                     switchPlayer();
@@ -281,11 +284,12 @@ const playGame = (() => {
 
     // make public to global
     return {
-        addClicks,      // used by init click event
-        removeClicks,   // used by init click event
-        getPlayers,     // used by init click event
-        setTicker,      // used by init click event
-        clearTicker     // used by init click event
+        getGameMode,    // used by init click event (_gameModeButton)
+        addClicks,      // used by init click event (_startButton)
+        removeClicks,   // used by init click event (_startButton -> checkErrors, _restartButton)
+        getPlayers,     // used by init click event (_startButton)
+        setTicker,      // used by init click event (_startButton)
+        clearTicker     // used by init click event (_restartButton)
     };
 
 })();
@@ -330,20 +334,47 @@ const init = (() => {
     // cache DOM
     const _startButton = document.getElementById('start');
     const _restartButton = document.getElementById('restart');
+    const _gameModeButton = document.querySelector('div.game-mode');
     const _form = document.querySelector('form.set-players');
     let _inputX = document.querySelector('input#X');
     let _inputO = document.querySelector('input#O');
     let _labelX = _inputX.nextElementSibling;
     let _labelO = _inputO.nextElementSibling;
+    let gameMode = 'human';
 
     // bind listeners
+    _gameModeButton.addEventListener('click', () => {
+        console.log('_gameModeButton clicked');
+        if (_gameModeButton.id === 'human') {
+            _gameModeButton.id = 'ai';
+            _gameModeButton.textContent = '[computer]';
+            _inputO.value = 'computer';
+            showName(_labelO, _inputO);
+        } else if (_gameModeButton.id === 'ai') {
+            _gameModeButton.id = 'human';
+            _gameModeButton.textContent = '[human]';
+            clearInput(_inputO);
+            hideName(_labelO, _inputO);
+        }
+        gameMode = _gameModeButton.id;
+    });
+
     _startButton.addEventListener('click', () => {
+        console.log(gameMode);
+        // verify entries
         checkErrors(_inputX);
-        checkErrors(_inputO);
+        if (gameMode === 'human') {
+            // if opponent is human, check for errors
+            checkErrors(_inputO);
+        };
+        // init game
         if (_form.checkValidity() === true) {
-            setPlayers(_inputX, _inputO);
+            setPlayer(_inputX);
+            setPlayer(_inputO);
+
             playGame.getPlayers(players);
             playGame.setTicker();
+            playGame.getGameMode(gameMode);
             playGame.addClicks(boardSpace);  
         };
     });
@@ -381,13 +412,15 @@ const init = (() => {
         input.setCustomValidity('');
         errorDiv.remove();
     };
-    function setPlayers(inputX, inputO) {
+    function setPlayer(input) {
         // create players
-        let _playerX = createPlayer(inputX.value, inputX.id);
-        let _playerO = createPlayer(inputO.value, inputO.id);
-        // save players
-        _playerX.savePlayer(players);
-        _playerO.savePlayer(players);
+        if (input.id === 'X') {
+            let _playerX = createPlayer(input.value, input.id);
+            _playerX.savePlayer(players);
+        } else if (input.id === 'O') {
+            let _playerO = createPlayer(input.value, input.id);
+            _playerO.savePlayer(players);
+        }
     };
     function showName(target, source) {
         // target === label
