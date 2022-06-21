@@ -58,7 +58,7 @@ const gameboard = (() => {
 
 const computer = (() => {
     // data
-    let _availMoves = [];
+    let availMoves = [];
     let boardArray = gameboard.returnBoardArray();
 
     // cache DOM
@@ -66,45 +66,47 @@ const computer = (() => {
     // bind listeners
 
     // methods
-    function makeMove() {
-        //// update available moves
-        //// generate random index number
-        // check if index number in available moves
-        // if index available, mark board
-
-        getAvailMoves(); // ! move out -- push once, then splice for every move
-        chooseCell();
+    function returnAvailMoves() {
+        return availMoves;
     }
     function getAvailMoves() {
         console.log('getAvailMoves()')
         // if boardArray cell.length === 0, push that index to _availMoves
         for (let i = 0; i < (boardArray.length); i++) {
             if (boardArray[i].length === 0) {
-                console.log(i);
-                _availMoves.push(i);
+                // console.log(i);
+                availMoves.push(i);
             };
         };
+        console.log(availMoves);
     };
-    function chooseCell() {
+    function selectMove() {
+        console.log('selectMove()');
         let validMove = false;
         let n;
-        
+
         while (validMove === false) {
-            validMove = true;
             n = Math.floor(Math.random() * 10);
-            if (_availMoves.includes(n)) {
+            if (availMoves.includes(n)) {
+                let i = availMoves.indexOf(n);
+                availMoves.splice(i, 1);
                 validMove = true;
             };
         };
         
         console.log('computer moves to ' + n)
+        console.log(availMoves);
+
+        return n;
     };
 
     //actions
 
     // make public to global
     return {
-        makeMove,   // used by playGame -> markBoard
+        returnAvailMoves,   // used by playGame data
+        getAvailMoves,      // used by playGame -> markBoard
+        selectMove          // used by playGame -> markBoard
     };
 })();
 
@@ -121,6 +123,7 @@ const playGame = (() => {
                   ];
     let boardArray = gameboard.returnBoardArray();
     let boardSpace = gameboard.returnBoardSpace();
+    let availMoves = computer.returnAvailMoves();
 
     let _winMatch;
     let _xMarks = [];
@@ -158,21 +161,37 @@ const playGame = (() => {
         };
     };
     function markBoard(e) {
+        if (_turnCounter === 0) {
+            computer.getAvailMoves();
+        };
         if (markValid(e) === true) {
+            // count human turn
             _turnCounter++;
             e.target.textContent = players[_currPlayer].returnMark();
             boardArray[e.target.id] = players[_currPlayer].returnMark();
 
+            // mark human moves
             if (players[_currPlayer].returnMark() === 'X') {
                 // log X mark
                 _xMarks.push(e.target.id);
+                if (gameMode === 'ai') {
+                    // update availMoves for computer
+                    //// console.log('e.target.id: ' + e.target.id);
+                    //// console.log('type of id: ' + typeof(e.target.id));
+                    //// console.log('index of e.target.id in availMoves: ' + availMoves.indexOf(parseInt(e.target.id)));
+                    availMoves.splice(availMoves.indexOf(parseInt(e.target.id)), 1);
+                };
             } else {
                 // log O mark
                 _oMarks.push(e.target.id);
             };
             if (gameMode === 'ai') {
-                // log computer move
-                computer.makeMove();
+                // count computer turn
+                _turnCounter++;
+
+                // mark/log computer move
+                _oMarks.push(computer.selectMove());
+                //// console.log(_oMarks);
             };
             if (_turnCounter >= 5) {
                 if (players[_currPlayer].returnMark() === 'X') {
