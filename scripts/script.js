@@ -56,6 +56,28 @@ const gameboard = (() => {
     };
 })();
 
+const computer = (() => {
+    // data
+    let boardArray = gameboard.returnBoardArray();
+
+    // cache DOM
+
+    // bind listeners
+
+    // methods
+    function displayBoardArray() {
+        console.log('enter displayBoardArray');
+        console.log(boardArray);
+    };
+
+    //actions
+
+    // make public to global
+    return {
+        displayBoardArray,  // qc
+    };
+})();
+
 const playGame = (() => {
     // data
     const _wins = [['0', '1', '2'],
@@ -79,6 +101,9 @@ const playGame = (() => {
 
     let _turnCounter = 0;
     let _tickerMessage = '';
+
+    let gameMode = 'human';
+    //// let gameMode = 'ai';
 
     // cache DOM
     const _ticker = document.querySelector('#game-container h3');
@@ -109,9 +134,16 @@ const playGame = (() => {
             boardArray[e.target.id] = players[_currPlayer].returnMark();
 
             if (players[_currPlayer].returnMark() === 'X') {
+                // log X mark
                 _xMarks.push(e.target.id);
             } else {
+                // log O mark
                 _oMarks.push(e.target.id);
+            };
+            if (gameMode === 'ai') {
+                // log computer move
+                console.log('log computer move');
+                computer.displayBoardArray();
             };
             if (_turnCounter >= 5) {
                 if (players[_currPlayer].returnMark() === 'X') {
@@ -124,8 +156,10 @@ const playGame = (() => {
                     updateTicker(_tickerMessage);
                 };
             };
-            if ((!_winMatch) && (_turnCounter < 9)) {
-                switchPlayer();
+            if (gameMode === 'human') {
+                if ((!_winMatch) && (_turnCounter < 9)) {
+                    switchPlayer();
+                };
             };
         };
     };
@@ -165,10 +199,10 @@ const playGame = (() => {
     };
     function setTicker() {
         _ticker.textContent = players[_currPlayer].returnName() + "'s turn...";
-    }
+    };
     function clearTicker() {
         _ticker.textContent = '';
-    }
+    };
 
     // actions
     gameboard.display();
@@ -180,7 +214,7 @@ const playGame = (() => {
         getPlayers,     // used by init click event
         setTicker,      // used by init click event
         clearTicker     // used by init click event
-    }
+    };
 
 })();
 
@@ -325,5 +359,5 @@ const init = (() => {
     // make public to global
     return {
         returnPlayers   // unused (qc)
-    }
+    };
 })();
