@@ -271,6 +271,7 @@ const init = (() => {
         if (_form.checkValidity() === true) {
             setPlayers(_inputX, _inputO);
             playGame.getPlayers(players);
+            console.log(players);
             playGame.setTicker();
             playGame.addClicks(boardSpace);  
         };
@@ -290,6 +291,10 @@ const init = (() => {
         // input has value && input has previous error...
         } else if ((input.value) && (input.validity.customError)) {
             removeError(input);
+            let label = input.nextElementSibling;
+            showName(label, input);
+        // if input has value && no previous error...
+        } else if ((input.value) && (!input.validity.customError)) {
             let label = input.nextElementSibling;
             showName(label, input);
         };
