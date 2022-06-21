@@ -8,6 +8,10 @@ body {
     display: none;
 }
 
+h1 {
+    margin: 2rem;
+}
+
 .set-players {
     display: flex;
 }
@@ -17,23 +21,37 @@ body {
         flex-flow: column;
         align-items: center;
 
-        width: 30vw;
-        border: 1px solid blue;
+        width: 20vw;
     }
 
         .player-input input {
             text-align: center;
-            margin-top: 0;
-            margin-bottom: 0.5rem;
-            /* margin doesn't account for 2px top-bottom border */
         }
 
+        label {
+            line-height: calc(1.15em + 4px);
+        }
+
+        .player-desc {
+            margin-top: 0.35em;
+        }
+
+button {
+    margin: 1em 0em;
+}
+
 #game-container {
+    position: relative;
     display:flex;
     flex-flow: column;
     justify-content: center;
     align-items: center;
 }
+
+    h3 {
+        position: absolute;
+        top: 0rem;
+    }
 
     #board-space {
         display: flex;
@@ -42,6 +60,9 @@ body {
         align-items: center;
 
         height: auto; width: auto;
+
+        /* padding collapse to include h3 ticker */
+        margin-top: 2rem;
     }
 
         #board-space .row {
@@ -54,5 +75,5 @@ body {
                 justify-content: center;
                 align-items: center;
                 
-                height: 20vw; width: 20vw;
+                height: 16vh; width: 16vh;
             }
