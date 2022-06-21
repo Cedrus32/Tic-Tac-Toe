@@ -58,6 +58,7 @@ const gameboard = (() => {
 
 const computer = (() => {
     // data
+    let _availMoves = [];
     let boardArray = gameboard.returnBoardArray();
 
     // cache DOM
@@ -65,16 +66,45 @@ const computer = (() => {
     // bind listeners
 
     // methods
-    function displayBoardArray() {
-        console.log('enter displayBoardArray');
-        console.log(boardArray);
+    function makeMove() {
+        //// update available moves
+        //// generate random index number
+        // check if index number in available moves
+        // if index available, mark board
+
+        getAvailMoves(); // ! move out -- push once, then splice for every move
+        chooseCell();
+    }
+    function getAvailMoves() {
+        console.log('getAvailMoves()')
+        // if boardArray cell.length === 0, push that index to _availMoves
+        for (let i = 0; i < (boardArray.length); i++) {
+            if (boardArray[i].length === 0) {
+                console.log(i);
+                _availMoves.push(i);
+            };
+        };
+    };
+    function chooseCell() {
+        let validMove = false;
+        let n;
+        
+        while (validMove === false) {
+            validMove = true;
+            n = Math.floor(Math.random() * 10);
+            if (_availMoves.includes(n)) {
+                validMove = true;
+            };
+        };
+        
+        console.log('computer moves to ' + n)
     };
 
     //actions
 
     // make public to global
     return {
-        displayBoardArray,  // qc
+        makeMove,   // used by playGame -> markBoard
     };
 })();
 
@@ -102,8 +132,8 @@ const playGame = (() => {
     let _turnCounter = 0;
     let _tickerMessage = '';
 
-    let gameMode = 'human';
-    //// let gameMode = 'ai';
+    //// let gameMode = 'human';
+    let gameMode = 'ai';
 
     // cache DOM
     const _ticker = document.querySelector('#game-container h3');
@@ -142,8 +172,7 @@ const playGame = (() => {
             };
             if (gameMode === 'ai') {
                 // log computer move
-                console.log('log computer move');
-                computer.displayBoardArray();
+                computer.makeMove();
             };
             if (_turnCounter >= 5) {
                 if (players[_currPlayer].returnMark() === 'X') {
@@ -242,9 +271,9 @@ function createPlayer(name, mark) {
 
     // make public to global
     return {
-        returnName,     // unused (qc)
+        returnName,     // used by playGame (markBoard, switchPlayer)
         displayName,    // unused (qc)
-        returnMark,     // unused (qc)
+        returnMark,     // used by playGame (markBoard, switchPlayer)
         displayMark,    // unused (qc)
         savePlayer      // used by init (click event -> setPlayers)
     };
@@ -271,7 +300,6 @@ const init = (() => {
         if (_form.checkValidity() === true) {
             setPlayers(_inputX, _inputO);
             playGame.getPlayers(players);
-            console.log(players);
             playGame.setTicker();
             playGame.addClicks(boardSpace);  
         };
