@@ -1,11 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Comic+Neue&family=Patrick+Hand&display=swap');
 
+:root {
+    --font-shrink: 1vw;
+    --title: calc(1.75rem + var(--font-shrink));
+    --ui: calc(0.5rem + var(--font-shrink));
+    --board: calc(2.5rem + var(--font-shrink));
+}
+
 body {
-    font-size: 1rem;
+    font-size: var(--ui);
     font-family: 'Comic Neue', cursive;
+}
+
+h1 {
+    font-size: var(--title);
 }
 
 #board-space {
     font-family: 'Patrick Hand', cursive;
-    font-size: 5rem;
+    font-size: var(--board);
 }
