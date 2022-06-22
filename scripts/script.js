@@ -376,6 +376,9 @@ const init = (() => {
             playGame.setTicker();
             playGame.getGameMode(gameMode);
             playGame.addClicks(boardSpace);  
+
+            _startButton.classList.add('hide');
+            _restartButton.classList.remove('hide');
         };
     });
     _restartButton.addEventListener('click', () => {
@@ -383,6 +386,9 @@ const init = (() => {
         playGame.clearTicker();
         playGame.removeClicks(boardSpace);
         gameboard.clear();
+
+        _startButton.classList.remove('hide');
+        _restartButton.classList.add('hide');
     });
 
     // methods
@@ -403,14 +409,16 @@ const init = (() => {
     };
     function createError(input) {
         input.setCustomValidity('Player ' + input.id + ' name?');
-        let errorDiv = document.createElement('div');
-        input.parentElement.insertBefore(errorDiv, input.nextElementSibling);
-        errorDiv.textContent = input.validationMessage;
+        // let errorDiv = document.createElement('div');
+        // input.parentElement.insertBefore(errorDiv, input.nextElementSibling);
+        // errorDiv.textContent = input.validationMessage;
+        input.placeholder = input.validationMessage;
     };
     function removeError(input) {
-        let errorDiv = input.nextElementSibling;
+        // let errorDiv = input.nextElementSibling;
         input.setCustomValidity('');
-        errorDiv.remove();
+        // errorDiv.remove();
+        input.placeholder = 'name';
     };
     function setPlayer(input) {
         // create players

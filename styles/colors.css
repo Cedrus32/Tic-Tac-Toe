@@ -1,8 +1,26 @@
+:root {
+    --xplayer-main: hsl(250, 50%, 40%);
+    --xplayer-light: hsl(250, 75%, 75%);
+    --oplayer-main: hsl(20, 75%, 50%);
+    --oplayer-light: hsl(20, 100%, 75%);
+    --accent: hsl(45, 75%, 60%);
+}
+
+body {
+    /* background-color: var(--accent); */
+    background-image: url('./assets/bg/dawn.svg');
+}
+
+.player-input {
+    border: 1px solid black;
+}
+
 #board-space {
-    background-color: lightgray;
-    border: 1px solid red;
+    background-color: black;
+    border: 2px solid black;
 }
 
 #board-space .row div {
-    border: 1px solid black;
+    background-color: white;
+    /* border: 1px solid black; */
 }

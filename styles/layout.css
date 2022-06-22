@@ -2,6 +2,8 @@ body {
     display: flex;
     flex-flow: column;
     align-items: center;
+
+    height: 100vh;
 }
 
 .hide {
@@ -61,6 +63,11 @@ button {
 
         height: auto; width: auto;
         margin-top: 2rem;
+    }
+
+    #board-space,
+    #board-space .row {
+        gap: 2px;
     }
 
         #board-space .row {
