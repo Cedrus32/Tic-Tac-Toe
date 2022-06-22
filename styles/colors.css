@@ -7,11 +7,21 @@
 }
 
 body {
-    /* background-color: var(--accent); */
-    background-image: url('./assets/bg/dawn.svg');
+    background-image: url('../assets/bg/dawn.svg');
+    background-position: center bottom;
+    background-size: cover;
 }
 
-.player-input {
+.player-container {
+    background-color: rgb(255, 255, 255, 50%);
+    border: 1px solid black;
+}
+
+.player-fieldset {
+    border: none;
+}
+
+button {
     border: 1px solid black;
 }
 
