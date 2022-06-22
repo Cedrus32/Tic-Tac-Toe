@@ -4,17 +4,28 @@
     --oplayer-main: hsl(20, 75%, 50%);
     --oplayer-light: hsl(20, 100%, 75%);
     --accent: hsl(45, 75%, 60%);
+    --dark: hsl(0, 0%, 15%);
+    --light: rgb(247, 230, 232);
+    --light-alpha: rgb(247, 230, 232, 75%);
+
+    --border-lrg: 1rem;
+    --border-sml-1: 0.75rem;
+    --border-sml-2: 0.5rem;
+    --border-sml-3: 0.35rem;
 }
 
 body {
     background-image: url('../assets/bg/dawn.svg');
     background-position: center bottom;
     background-size: cover;
+
+    color: var(--dark);
 }
 
 .player-container {
-    background-color: rgb(255, 255, 255, 50%);
-    border: 1px solid black;
+    background-color: var(--light-alpha);
+    border: 1px solid var(--dark);
+    border-radius: var(--border-lrg);
 }
 
 .player-fieldset {
@@ -22,15 +33,38 @@ body {
 }
 
 button {
-    border: 1px solid black;
+    border: 1px solid var(--dark);
+    border-radius: var(--border-sml-1);
+}
+
+input {
+    border: none;
+    border-radius: var(--border-sml-2);
 }
 
 #board-space {
-    background-color: black;
-    border: 2px solid black;
+    background-color: var(--dark);
+    border: 2px solid var(--dark);
+    border-radius: var(--border-sml-2);
 }
 
-#board-space .row div {
-    background-color: white;
-    /* border: 1px solid black; */
+#board-space .row div,
+input,
+button {
+    background-color: var(--light);
+}
+
+#board-space .row:nth-child(1) div:nth-child(1) {
+    border-radius: var(--border-sml-3) 0px 0px 0px;
+}
+#board-space .row:nth-child(1) div:nth-child(3) {
+    border-radius: 0px var(--border-sml-3) 0px 0px;
+}
+
+#board-space .row:nth-child(3) div:nth-child(3) {
+    border-radius: 0px 0px var(--border-sml-3) 0px;
+}
+
+#board-space .row:nth-child(3) div:nth-child(1) {
+    border-radius: 0px 0px 0px var(--border-sml-3);
 }
