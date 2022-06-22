@@ -1,10 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Comic+Neue&family=Patrick+Hand&display=swap');
 
 :root {
-    --font-shrink: 1vw;
-    --title: calc(1.75rem + var(--font-shrink));
-    --ui: calc(0.5rem + var(--font-shrink));
-    --board: calc(2.5rem + var(--font-shrink));
+    /* --shrink: 1vw; */
+    --title: calc(1.75rem + var(--shrink));
+    --ui: calc(0.5rem + var(--shrink));
+    --ticker: calc(1rem + var(--shrink));
+    --board: calc(2.5rem + var(--shrink));
 }
 
 body {
@@ -14,6 +15,18 @@ body {
 
 h1 {
     font-size: var(--title);
+}
+
+button {
+    text-align: center;
+}
+
+label {
+    text-align: center;
+}
+
+h3 {
+    font-size: var(--ticker);
 }
 
 #board-space {
