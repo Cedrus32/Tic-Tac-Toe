@@ -1,16 +1,18 @@
 :root {
+    --shrink: 1vw;
     --title-margin: 2rem;
     --input-width: 20vw;
     --input-sibling-padding: 0.35em;
     --setplayers-width-min: calc(2 * var(--input-width));
     --setplayers-width-max: calc(10 + var(--setplayers-width-min));
-    --cell-edge: calc(2em + var(--font-shrink));
+    --cell-edge: 2.5em;
 }
 
 body {
     display: flex;
     flex-flow: column;
     align-items: center;
+    gap: calc(1rem + var(--shrink));
 
     height: 100vh;
 }
@@ -20,32 +22,34 @@ body {
 }
 
 h1 {
-    margin: var(--title-margin);
+    margin-top: var(--title-margin);
 }
 
-.set-players {
+.player-container {
     display: flex;
-    width: minmax(var(--setplayers-width-min), var(--setplayers-width-max));
 }
 
-    .player-input {
+    .player-fieldset {
         display: flex;
         flex-flow: column;
+        justify-content: center;
         align-items: center;
 
-        min-width: var(--input-width);
+        width: auto;
     }
 
         .legend {
             margin-bottom: var(--input-sibling-padding);
         }
 
-        .player-input input {
+        .player-fieldset input {
             text-align: center;
+            width: var(--input-width);
         }
 
         label {
             line-height: calc(1.15em + 4px);
+            min-width: calc(var(--input-width));
         }
 
         .player-desc {
@@ -53,7 +57,7 @@ h1 {
         }
 
 button {
-    margin: 1em 0em;
+    padding: 0.2em;
 }
 
 #game-container {
@@ -65,8 +69,11 @@ button {
 }
 
     h3 {
-        position: absolute;
-        top: 0rem;
+        position: relative;
+        top: 0px;
+
+        height: var(--ticker);
+        margin: 0em 0em;
     }
 
     #board-space {
@@ -76,7 +83,6 @@ button {
         align-items: center;
 
         height: auto; width: auto;
-        margin-top: 2rem;
     }
 
     #board-space,

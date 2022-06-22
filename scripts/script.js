@@ -151,7 +151,7 @@ const playGame = (() => {
     let gameMode = '';
 
     // cache DOM
-    const _ticker = document.querySelector('#game-container h3');
+    const _ticker = document.querySelector('h3');
 
     // methods
     function getGameMode(mode) {
@@ -335,7 +335,7 @@ const init = (() => {
     const _startButton = document.getElementById('start');
     const _restartButton = document.getElementById('restart');
     const _gameModeButton = document.querySelector('div.game-mode');
-    const _form = document.querySelector('form.set-players');
+    const _form = document.querySelector('form.player-container');
     let _inputX = document.querySelector('input#X');
     let _inputO = document.querySelector('input#O');
     let _labelX = _inputX.nextElementSibling;

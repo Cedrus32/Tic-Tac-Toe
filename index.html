@@ -15,16 +15,16 @@
         
         <h1>Tic-Tac-Toe</h1>
 
-        <form class='set-players'>
-            <fieldset class='player-input'>
+        <form class='player-container'>
+            <fieldset class='player-fieldset'>
                 <div class='legend'>Player X</div>
-                <input type='text' id='X' placeholder='name' minlength='1' maxlength='25' required>
+                <input type='text' id='X' placeholder='name' minlength='1' maxlength='15' required>
                 <label class='hide'>name</label>
                 <div class='player-desc'>[human]</div>
             </fieldset>
-            <fieldset class='player-input'>
+            <fieldset class='player-fieldset'>
                 <div class='legend'>Player X</div>
-                <input id='O' type='text' placeholder='name' minlength='1' maxlength='25' required>
+                <input id='O' type='text' placeholder='name' minlength='1' maxlength='15' required>
                 <label class='hide'>name</label>
                 <div class='player-desc game-mode' id='human'>[human]</div>
             </fieldset>
@@ -33,8 +33,9 @@
         <button class='' id='start'>START</button>
         <button class='hide' id='restart'>RESTART</button>
 
+        <h3></h3>
+
         <section id='game-container' class='hide'>
-            <h3></h3>
             <section id='board-space'></section>
         </section>
 
