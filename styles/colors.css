@@ -8,6 +8,7 @@
     --dark: hsl(0, 0%, 15%);
     --light: rgb(247, 230, 232);
     --light-alpha: rgb(247, 230, 232, 75%);
+    --icon-sel: #8f8aa8;
 
     --border-lrg: 1rem;
     --border-sml-1: 0.75rem;
