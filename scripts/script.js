@@ -50,7 +50,7 @@ const gameboard = (() => {
         for (let i = 0; i < (boardArray.length); i++) {
             boardArray[i] = '';
         };
-        console.log('boardArray: [' + boardArray + ']');
+        //// console.log('boardArray: [' + boardArray + ']');
     };
 
     // make public to global
@@ -78,7 +78,7 @@ const computer = (() => {
         return availMoves;
     }
     function getAvailMoves() {
-        console.log('getAvailMoves()')
+        //// ('getAvailMoves()')
         // if boardArray cell.length === 0, push that index to _availMoves
         for (let i = 0; i < (boardArray.length); i++) {
             if (boardArray[i].length === 0) {
@@ -86,10 +86,10 @@ const computer = (() => {
                 availMoves.push(move);
             };
         };
-        console.log('availMoves: ' + availMoves);
+        //// console.log('availMoves: ' + availMoves);
     };
     function selectMove() {
-        console.log('selectMove()...');
+        //// console.log('selectMove()...');
         let validMove = false;
         let n;
         let move;
@@ -97,7 +97,7 @@ const computer = (() => {
         while (validMove === false) {
             n = Math.floor(Math.random() * 9);
             move = n.toString();
-            console.log({move});
+            //// console.log({move});
             if (availMoves.includes(move)) {
                 validMove = true;
             };
@@ -106,13 +106,13 @@ const computer = (() => {
         return move;
     };
     function markBoard(move) {
-        console.log('computer.markBoard()...')
+        //// console.log('computer.markBoard()...')
         for (let x = 0; x < 3; x++) {
             let row = boardSpace.children[x];
             for (let y = 0; y < 3; y++) {
                 let cell = row.children[y];
                 if (cell.id === move) {
-                    console.log('cell: cell[' + cell.id + ']');
+                    //// console.log('cell: cell[' + cell.id + ']');
                     cell.textContent = 'O';
                 };
             };
@@ -120,7 +120,7 @@ const computer = (() => {
     };
     function clearAvailMoves() {
         availMoves.length = 0;
-        console.log('availMoves: [' + availMoves + ']');
+        //// console.log('availMoves: [' + availMoves + ']');
     };
 
     //actions
@@ -188,27 +188,28 @@ const playGame = (() => {
         };
     };
     function markBoard(e) {
-        console.log('new game mode (mark board): ' + gameMode);
-        console.log('');
+        //// console.log('new game mode (mark board): ' + gameMode);
+        //// console.log('');
         if ((gameMode === 'ai') && (_turnCounter === 0)) {
             computer.getAvailMoves();
         };
         if (markValid(e) === true) {
             // count human turn
             _turnCounter++;
+            //// console.log('_turnCounter: ' + _turnCounter);
 
             // * mark board & update boardArray with human move
-            console.log('human selects...')
+            //// console.log('human selects...')
             e.target.textContent = players[_currPlayer].returnMark();
             boardArray[e.target.id] = players[_currPlayer].returnMark();
 
             // mark human moves
             if (players[_currPlayer].returnMark() === 'X') {
                 _xMarks.push(e.target.id);
-                console.log('_xMarks: ' + _xMarks);
+                //// console.log('_xMarks: ' + _xMarks);
                 if (gameMode === 'ai') {
                     updateAvailMoves(e.target.id);
-                    console.log('availMoves: ' + availMoves);
+                    //// console.log('availMoves: ' + availMoves);
                 };
             } else {
                 _oMarks.push(e.target.id);
@@ -218,15 +219,15 @@ const playGame = (() => {
                 _turnCounter++;
 
                 // * mark board & update boardArray with computer move
-                console.log('computer selects...')
+                //// console.log('computer selects...')
                 let computerMove = computer.selectMove();
-                console.log('computerMove: ' + computerMove);
+                //// console.log('computerMove: ' + computerMove);
                 computer.markBoard(computerMove);
                 _oMarks.push(computerMove);
-                console.log('_oMarks: ' + _oMarks);
+                //// console.log('_oMarks: ' + _oMarks);
                 updateAvailMoves(computerMove);
-                console.log('availMoves: ' + availMoves);
-                console.log('');
+                //// console.log('availMoves: ' + availMoves);
+                //// console.log('');
             };
             // check for wins
             if (_turnCounter >= 5) {
@@ -235,7 +236,15 @@ const playGame = (() => {
                 } else {
                     checkWin(_oMarks);
                 };
-                if ((_turnCounter === 9) && (!_winMatch)) {
+                //// console.log('_winMatch?: ' + _winMatch);
+                //// console.log('');
+                if (_winMatch) {
+                    //// console.log('enter _winMatch conditional');
+                    _tickerMessage = players[_currPlayer].returnName() + ' wins!';
+                    updateTicker(_tickerMessage);
+                    removeClicks(boardSpace);
+                    _turnCounter = 0;
+                } else if ((!_winMatch) && (_turnCounter === 9)) {
                     _tickerMessage = "It's a tie.";
                     updateTicker(_tickerMessage);
                     _turnCounter = 0;
@@ -243,11 +252,11 @@ const playGame = (() => {
             };
             // switch human player
             if (gameMode === 'human') {
-                console.log('_turnCounter? (switch player): ' + _turnCounter);
-                console.log('_winMatch? (switch player): ' + _winMatch);
                 if ((!_winMatch) && (_turnCounter < 9)) {
                     switchPlayer();
-                };
+                } else {
+                    _winMatch = false;
+                }
             };
         };
     };
@@ -264,10 +273,9 @@ const playGame = (() => {
         for (let set in _wins) {
             _winMatch = _wins[set].every(mark => playerMarks.includes(mark));
             if (_winMatch) {
-                _tickerMessage = players[_currPlayer].returnName() + ' wins!';
-                updateTicker(_tickerMessage);
-                removeClicks(boardSpace);
-                _turnCounter = 0;
+                // _tickerMessage = players[_currPlayer].returnName() + ' wins!';
+                // updateTicker(_tickerMessage);
+                // removeClicks(boardSpace);
                 break;
             };
         };
@@ -297,13 +305,13 @@ const playGame = (() => {
     };
     function clearWinMatch() {
         _winMatch = false;
-        console.log('_winMatch: ' + _winMatch);
+        //// console.log('_winMatch: ' + _winMatch);
     }
     function clearMoves() {
         _xMarks = [];
         _oMarks = [];
-        console.log('_xMarks: [' + _xMarks + ']');
-        console.log('_oMarks: [' + _oMarks + ']');
+        //// console.log('_xMarks: [' + _xMarks + ']');
+        //// console.log('_oMarks: [' + _oMarks + ']');
     };
 
     // actions
@@ -333,10 +341,10 @@ function createPlayer(name, mark) {
         return _name;
     };
     function displayName() {
-        console.log(_name);
+        //// console.log(_name);
     };
     function displayMark() {
-        console.log(_mark);
+        //// console.log(_mark);
     };
     function returnMark() {
         return _mark;
@@ -375,7 +383,7 @@ const init = (() => {
     _gameModeButtons.forEach(button => button.addEventListener('click', (e) => {
         // ! pull out into separate functions
         if (e.target.id === 'ai') {
-            console.log('switch to computer opponent');
+            //// console.log('switch to computer opponent');
             // deselect human
             _gameModeButtons[0].src='./assets/human.svg';
             _gameModeButtons[0].classList.remove('selected');
@@ -386,7 +394,7 @@ const init = (() => {
             _inputO.value = 'computer';
             showName(_labelO, _inputO);
         } else if (e.target.id === 'human') {
-            console.log('switch to human opponent');
+            //// console.log('switch to human opponent');
             // deselect computer
             _gameModeButtons[1].src='./assets/computer.svg';
             _gameModeButtons[1].classList.remove('selected');
@@ -401,8 +409,8 @@ const init = (() => {
     }));
 
     _startButton.addEventListener('click', () => {
-        console.log('new game mode (start click): ' + gameMode);
-        console.log('');
+        //// ('new game mode (start click): ' + gameMode);
+        //// console.log('');
         // verify entries
         checkErrors(_inputX);
         if (gameMode === 'human') {
@@ -425,26 +433,26 @@ const init = (() => {
     });
     _restartButton.addEventListener('click', () => {
         resetGameMode();
-        console.log('game mode: ' + gameMode);
         unsetPlayers(players);
-        console.log('players: [' + players + ']');
         playGame.clearMoves();
-        // console log in main function
         computer.clearAvailMoves();
-        // console log in main function
 
         gameboard.clear();
         gameboard.clearBoardArray();
-        // console log in main function
         playGame.clearTicker();
         playGame.clearWinMatch();
-        // console log in main function
 
         playGame.removeClicks(boardSpace);
         _startButton.classList.remove('hide');
         _restartButton.classList.add('hide');
 
-        console.log('');
+        //// console.log('game mode: ' + gameMode);
+        //// console.log('players: [' + players + ']');
+        //// console.log moves in main function
+        //// console.log availMoves in main function
+        //// console.log boardArray in main function
+        //// console.log _winMatch in main function
+        //// console.log('');
     });
 
     // methods
