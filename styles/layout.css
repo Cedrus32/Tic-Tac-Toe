@@ -67,6 +67,14 @@ button {
     padding: 0.30em;
 }
 
+h3 {
+    position: relative;
+    top: 0px;
+
+    min-height: 1.15em;
+    margin: 0em 0em;
+}
+
 #game-container {
     position: relative;
     display:flex;
@@ -74,14 +82,6 @@ button {
     justify-content: center;
     align-items: center;
 }
-
-    h3 {
-        position: relative;
-        top: 0px;
-
-        height: var(--ticker);
-        margin: 0em 0em;
-    }
 
     #board-space {
         display: flex;
@@ -91,11 +91,6 @@ button {
 
         height: auto; width: auto;
     }
-
-    /* #board-space,
-    #board-space .row {
-        gap: 2px;
-    } */
 
         #board-space .row {
             display: flex;
