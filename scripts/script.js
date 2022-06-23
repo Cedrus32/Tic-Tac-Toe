@@ -46,13 +46,20 @@ const gameboard = (() => {
     function returnBoardArray() {
         return boardArray;
     };
+    function clearBoardArray() {
+        for (let i = 0; i < (boardArray.length); i++) {
+            boardArray[i] = '';
+        };
+        console.log('boardArray: [' + boardArray + ']');
+    };
 
     // make public to global
     return {
         display,            // used by playGame actions
         clear,              // used by init click event
         returnBoardSpace,   // used by init & playGame data
-        returnBoardArray    // used by playGame data
+        returnBoardArray,   // used by playGame data
+        clearBoardArray,    // used by init click event (_restartButton -> resetGame)
     };
 })();
 
@@ -111,6 +118,10 @@ const computer = (() => {
             };
         };
     };
+    function clearAvailMoves() {
+        availMoves.length = 0;
+        console.log('availMoves: [' + availMoves + ']');
+    };
 
     //actions
 
@@ -119,7 +130,8 @@ const computer = (() => {
         returnAvailMoves,   // used by playGame data
         getAvailMoves,      // used by playGame -> markBoard
         selectMove,         // used by playGame -> markBoard
-        markBoard           // used by playGame -> markBoard
+        markBoard,          // used by playGame -> markBoard
+        clearAvailMoves,    // used by init click event (_restartButton -> resetGame)
     };
 })();
 
@@ -138,7 +150,7 @@ const playGame = (() => {
     let boardSpace = gameboard.returnBoardSpace();
     let availMoves = computer.returnAvailMoves();
 
-    let _winMatch;
+    let _winMatch = false;
     let _xMarks = [];
     let _oMarks = [];
 
@@ -156,7 +168,7 @@ const playGame = (() => {
     // methods
     function getGameMode(mode) {
         gameMode = mode;
-    }
+    };
     function addClicks(board) {
         for (let x = 0; x < 3; x++) {
             let row = board.children[x];
@@ -176,7 +188,9 @@ const playGame = (() => {
         };
     };
     function markBoard(e) {
-        console.log(gameMode);
+        console.log('new game mode (mark board): ' + gameMode);
+        console.log('');
+        // console.log(gameMode);
         if ((gameMode === 'ai') && (_turnCounter === 0)) {
             computer.getAvailMoves();
         };
@@ -225,10 +239,13 @@ const playGame = (() => {
                 if ((_turnCounter === 9) && (!_winMatch)) {
                     _tickerMessage = "It's a tie.";
                     updateTicker(_tickerMessage);
+                    _turnCounter = 0;
                 };
             };
             // switch human player
             if (gameMode === 'human') {
+                console.log('_turnCounter? (switch player): ' + _turnCounter);
+                console.log('_winMatch? (switch player): ' + _winMatch);
                 if ((!_winMatch) && (_turnCounter < 9)) {
                     switchPlayer();
                 };
@@ -251,6 +268,7 @@ const playGame = (() => {
                 _tickerMessage = players[_currPlayer].returnName() + ' wins!';
                 updateTicker(_tickerMessage);
                 removeClicks(boardSpace);
+                _turnCounter = 0;
                 break;
             };
         };
@@ -278,6 +296,16 @@ const playGame = (() => {
     function clearTicker() {
         _ticker.textContent = '';
     };
+    function clearWinMatch() {
+        _winMatch = false;
+        console.log('_winMatch: ' + _winMatch);
+    }
+    function clearMoves() {
+        _xMarks = [];
+        _oMarks = [];
+        console.log('_xMarks: [' + _xMarks + ']');
+        console.log('_oMarks: [' + _oMarks + ']');
+    };
 
     // actions
     gameboard.display();
@@ -289,7 +317,9 @@ const playGame = (() => {
         removeClicks,   // used by init click event (_startButton -> checkErrors, _restartButton)
         getPlayers,     // used by init click event (_startButton)
         setTicker,      // used by init click event (_startButton)
-        clearTicker     // used by init click event (_restartButton)
+        clearTicker,    // used by init click event (_restartButton)
+        clearWinMatch,  // used by init click event (_restartButton)
+        clearMoves,     // used by init click event (_restartButton)
     };
 
 })();
@@ -334,7 +364,7 @@ const init = (() => {
     // cache DOM
     const _startButton = document.getElementById('start');
     const _restartButton = document.getElementById('restart');
-    const _gameModeButton = document.querySelector('div.game-mode');
+    const _gameModeButtons = document.querySelectorAll('img.game-mode');
     const _form = document.querySelector('form.player-container');
     let _inputX = document.querySelector('input#X');
     let _inputO = document.querySelector('input#O');
@@ -343,24 +373,38 @@ const init = (() => {
     let gameMode = 'human';
 
     // bind listeners
-    _gameModeButton.addEventListener('click', () => {
-        console.log('_gameModeButton clicked');
-        if (_gameModeButton.id === 'human') {
-            _gameModeButton.id = 'ai';
-            _gameModeButton.textContent = '[computer]';
+    _gameModeButtons.forEach(button => button.addEventListener('click', (e) => {
+        // ! pull out into separate functions
+        if (e.target.id === 'ai') {
+            console.log('switch to computer opponent');
+            // deselect human
+            _gameModeButtons[0].src='./assets/human.svg';
+            _gameModeButtons[0].classList.remove('selected');
+            // select computer
+            e.target.src='./assets/computer-sel.svg';
+            e.target.classList.add('selected');
+            // show computer label
             _inputO.value = 'computer';
             showName(_labelO, _inputO);
-        } else if (_gameModeButton.id === 'ai') {
-            _gameModeButton.id = 'human';
-            _gameModeButton.textContent = '[human]';
+        } else if (e.target.id === 'human') {
+            console.log('switch to human opponent');
+            // deselect computer
+            _gameModeButtons[1].src='./assets/computer.svg';
+            _gameModeButtons[1].classList.remove('selected');
+            // select human
+            e.target.src='./assets/human-sel.svg';
+            e.target.classList.add('selected');
+            // show human input
             clearInput(_inputO);
             hideName(_labelO, _inputO);
         }
-        gameMode = _gameModeButton.id;
-    });
+        gameMode = button.id;
+        // console.log(gameMode);
+    }));
 
     _startButton.addEventListener('click', () => {
-        console.log(gameMode);
+        console.log('new game mode (start click): ' + gameMode);
+        console.log('');
         // verify entries
         checkErrors(_inputX);
         if (gameMode === 'human') {
@@ -375,20 +419,34 @@ const init = (() => {
             playGame.getPlayers(players);
             playGame.setTicker();
             playGame.getGameMode(gameMode);
-            playGame.addClicks(boardSpace);  
+            playGame.addClicks(boardSpace);
 
             _startButton.classList.add('hide');
             _restartButton.classList.remove('hide');
         };
     });
     _restartButton.addEventListener('click', () => {
+        resetGameMode();
+        console.log('game mode: ' + gameMode);
         unsetPlayers(players);
-        playGame.clearTicker();
-        playGame.removeClicks(boardSpace);
-        gameboard.clear();
+        console.log('players: [' + players + ']');
+        playGame.clearMoves();
+        // console log in main function
+        computer.clearAvailMoves();
+        // console log in main function
 
+        gameboard.clear();
+        gameboard.clearBoardArray();
+        // console log in main function
+        playGame.clearTicker();
+        playGame.clearWinMatch();
+        // console log in main function
+
+        playGame.removeClicks(boardSpace);
         _startButton.classList.remove('hide');
         _restartButton.classList.add('hide');
+
+        console.log('');
     });
 
     // methods
@@ -409,9 +467,6 @@ const init = (() => {
     };
     function createError(input) {
         input.setCustomValidity('Player ' + input.id + ' name?');
-        // let errorDiv = document.createElement('div');
-        // input.parentElement.insertBefore(errorDiv, input.nextElementSibling);
-        // errorDiv.textContent = input.validationMessage;
         input.placeholder = input.validationMessage;
     };
     function removeError(input) {
@@ -430,14 +485,10 @@ const init = (() => {
             _playerO.savePlayer(players);
         }
     };
-    function showName(target, source) {
-        // target === label
-        // source === input
-        target.textContent = source.value;
-        if (source.classList.length === 0) {
-            hideElement(source); // hides input
-        };
-        showElement(target); // shows label
+    function showName(label, input) {
+        label.textContent = input.value;
+        hideElement(input); // hides input
+        showElement(label); // shows label
     };
     function unsetPlayers(players) {
         // delete players
@@ -451,14 +502,10 @@ const init = (() => {
         hideName(_labelX, _inputX)
         hideName(_labelO, _inputO)
     };
-    function hideName(target, source) {
-        // target === label
-        // source === input
-        target.textContent = '';
-        if (target.classList.length === 0) {
-            hideElement(source); // hides label
-        }
-        showElement(source); // shows input
+    function hideName(label, input) {
+        label.textContent = '';
+        hideElement(label); // hides label
+        showElement(input); // shows input
     };
     function hideElement(element) {
         element.classList.add('hide');
@@ -471,6 +518,17 @@ const init = (() => {
     };
     function returnPlayers() {
         return players;
+    };
+    function resetGameMode() {
+        if (gameMode === 'ai') {
+            // deselect computer
+            _gameModeButtons[1].classList.remove('selected');
+            _gameModeButtons[1].src='./assets/computer.svg';
+            // select human
+            _gameModeButtons[0].classList.add('selected');
+            _gameModeButtons[0].src='./assets/human-sel.svg';
+            gameMode = 'human';
+        };
     };
 
     // make public to global

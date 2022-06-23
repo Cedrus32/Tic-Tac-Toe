@@ -4,6 +4,7 @@
     --oplayer-main: hsl(20, 75%, 50%);
     --oplayer-light: hsl(20, 100%, 75%);
     --accent: hsl(45, 75%, 60%);
+
     --dark: hsl(0, 0%, 15%);
     --light: rgb(247, 230, 232);
     --light-alpha: rgb(247, 230, 232, 75%);
@@ -67,4 +68,12 @@ button {
 
 #board-space .row:nth-child(3) div:nth-child(1) {
     border-radius: 0px 0px 0px var(--border-sml-3);
+}
+
+.x {
+    background-color: var(--xplayer-main);
+}
+
+.o {
+    background-color: var(--oplayer-main);
 }

@@ -52,6 +52,10 @@ body {
         }
 
         .player-desc {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
             margin-top: var(--input-sibling-padding);
         }
 

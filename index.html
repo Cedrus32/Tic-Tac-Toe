@@ -20,13 +20,18 @@
                 <div class='legend'>Player X</div>
                 <input type='text' id='X' placeholder='name' minlength='1' maxlength='15' required>
                 <label class='hide'>name</label>
-                <div class='player-desc'>[human]</div>
+                <div class='player-desc'>
+                    <img src='./assets/human.svg'>
+                </div>
             </fieldset>
             <fieldset class='player-fieldset'>
                 <div class='legend'>Player X</div>
                 <input id='O' type='text' placeholder='name' minlength='1' maxlength='15' required>
                 <label class='hide'>name</label>
-                <div class='player-desc game-mode' id='human'>[human]</div>
+                <div class='player-desc'>
+                    <img class='game-mode selected' id='human' src='./assets/human-sel.svg'>
+                    <img class='game-mode' id='ai' src='./assets/computer.svg'>
+                </div>
             </fieldset>
         </form>
 
