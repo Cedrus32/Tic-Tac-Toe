@@ -59,6 +59,10 @@ body {
             margin-top: var(--input-sibling-padding);
         }
 
+            .player-desc img {
+                height: calc(1em + var(--shrink));
+            }
+
 button {
     padding: 0.30em;
 }
