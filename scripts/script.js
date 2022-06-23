@@ -372,6 +372,7 @@ const init = (() => {
     const _startButton = document.getElementById('start');
     const _restartButton = document.getElementById('restart');
     const _gameModeButtons = document.querySelectorAll('img.game-mode');
+    const _gameModeFilter = document.querySelector('.mode-filter');
     const _form = document.querySelector('form.player-container');
     let _inputX = document.querySelector('input#X');
     let _inputO = document.querySelector('input#O');
@@ -419,6 +420,7 @@ const init = (() => {
         };
         // init game
         if (_form.checkValidity() === true) {
+            disablePlayerChoice();
             setPlayer(_inputX);
             setPlayer(_inputO);
 
@@ -445,6 +447,7 @@ const init = (() => {
         playGame.removeClicks(boardSpace);
         _startButton.classList.remove('hide');
         _restartButton.classList.add('hide');
+        enablePlayerChoice();
 
         //// console.log('game mode: ' + gameMode);
         //// console.log('players: [' + players + ']');
@@ -495,6 +498,14 @@ const init = (() => {
         label.textContent = input.value;
         hideElement(input); // hides input
         showElement(label); // shows label
+    };
+    function enablePlayerChoice() {
+        console.log(_gameModeFilter.classList);
+        _gameModeFilter.classList.add('hide');
+    }
+    function disablePlayerChoice() {
+        console.log(_gameModeFilter.classList);
+        _gameModeFilter.classList.remove('hide');
     };
     function unsetPlayers(players) {
         // delete players

@@ -52,12 +52,22 @@ body {
         }
 
         .player-desc {
+            position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 1rem;
             margin-top: var(--input-sibling-padding);
         }
+
+            .mode-filter {
+                position: absolute;
+                top: 0px; left: 0px;
+                height: 100%;
+                width: 100%;
+                
+                background-color: transparent;
+            }
 
             .player-desc img {
                 height: calc(1em + var(--shrink));
