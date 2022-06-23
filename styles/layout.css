@@ -92,10 +92,10 @@ button {
         height: auto; width: auto;
     }
 
-    #board-space,
+    /* #board-space,
     #board-space .row {
         gap: 2px;
-    }
+    } */
 
         #board-space .row {
             display: flex;

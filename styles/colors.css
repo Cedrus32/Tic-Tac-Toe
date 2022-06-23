@@ -7,8 +7,9 @@
 
     --dark: hsl(0, 0%, 15%);
     --light: rgb(247, 230, 232);
-    --light-alpha: rgb(247, 230, 232, 75%);
-    --icon-sel: #8f8aa8;
+    --light-alpha-1: rgb(247, 230, 232, 75%);
+    --light-alpha-2: rgb(247, 230, 232, 90%);
+    --icon-sel: #9388A4;
 
     --border-lrg: 1rem;
     --border-sml-1: 0.75rem;
@@ -25,7 +26,7 @@ body {
 }
 
 .player-container {
-    background-color: var(--light-alpha);
+    background-color: var(--light-alpha-1);
     border: 1px solid var(--dark);
     border-radius: var(--border-lrg);
 }
@@ -45,7 +46,7 @@ input {
 }
 
 #board-space {
-    background-color: var(--dark);
+    /* background-color: var(--dark); */
     border: 2px solid var(--dark);
     border-radius: var(--border-sml-2);
 }
@@ -53,12 +54,23 @@ input {
 #board-space .row div,
 input,
 button {
-    background-color: var(--light);
+    background-color: var(--light-alpha-2);
+}
+
+#board-space .row:nth-child(1),
+#board-space .row:nth-child(2) {
+    border-bottom: 2px solid var(--dark);
+}
+
+#board-space .row div:nth-child(1),
+#board-space .row div:nth-child(2) {
+    border-right: 2px solid var(--dark);
 }
 
 #board-space .row:nth-child(1) div:nth-child(1) {
     border-radius: var(--border-sml-3) 0px 0px 0px;
 }
+
 #board-space .row:nth-child(1) div:nth-child(3) {
     border-radius: 0px var(--border-sml-3) 0px 0px;
 }
