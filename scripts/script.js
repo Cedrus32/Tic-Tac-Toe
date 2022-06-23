@@ -190,7 +190,6 @@ const playGame = (() => {
     function markBoard(e) {
         console.log('new game mode (mark board): ' + gameMode);
         console.log('');
-        // console.log(gameMode);
         if ((gameMode === 'ai') && (_turnCounter === 0)) {
             computer.getAvailMoves();
         };
@@ -399,7 +398,6 @@ const init = (() => {
             hideName(_labelO, _inputO);
         }
         gameMode = button.id;
-        // console.log(gameMode);
     }));
 
     _startButton.addEventListener('click', () => {
