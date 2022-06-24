@@ -24,7 +24,7 @@ const gameboard = (() => {
                 cellDiv = document.createElement('div');
                 cellDiv.id = cellCounter;
                 cellDiv.classList.add('empty');
-                console.log(cellDiv);
+                //// console.log(cellDiv);
                 rowDiv.appendChild(cellDiv);
                 cellCounter++;
             };
@@ -116,6 +116,7 @@ const computer = (() => {
                 if (cell.id === move) {
                     //// console.log('cell: cell[' + cell.id + ']');
                     cell.textContent = 'O';
+                    cell.classList = 'o-mark';
                     boardArray[cell.id] = 'O';
                 };
             };
@@ -195,44 +196,35 @@ const playGame = (() => {
         };
     };
     function showSelectStyle(e) {
-        console.log('mouseover');
-        console.log(e.target);
-        // console.log(players[_currPlayer].returnMark());
-        console.log((e.target.textContent.length));
+        //// console.log('mouseover');
+        //// console.log(e.target);
+        //// console.log((e.target.classList.length));
         if (e.target.textContent.length === 0) {
             e.target.classList.remove('empty');
             if (players[_currPlayer].returnMark() === 'X') {
-                console.log('add x-mark');
                 e.target.classList.add('x-mark');
             } else {
-                console.log('add o-mark');
                 e.target.classList.add('o-mark');
             };
         };
     };
     function hideSelectStyle(e) {
-        console.log('mouseleave');
-        // console.log(e.target);
-        // console.log(players[_currPlayer].returnMark());
-
-        // ! length is never 0 (always either empty, x-mark, o-mark)
-        // ! if vvv removed, removes styling, but doesn't keep for clicked cells
+        //// console.log('mouseleave');
         if ((e.target.textContent.length === 0) && (e.target.classList !== 'empty')) {
             e.target.classList.add('empty');
             if (players[_currPlayer].returnMark() === 'X') {
-                console.log('remove x-mark');
                 e.target.classList.remove('x-mark');
             } else {
-                console.log('remove o-mark');
                 e.target.classList.remove('o-mark');
             };
         };
-        console.log(e.target);
+        //// console.log(e.target);
+        //// console.log((e.target.classList.length));
     };
     function markBoard(e) {
         //// console.log('new game mode (mark board): ' + gameMode);
-        console.log(boardArray);
-        console.log('');
+        //// console.log(boardArray);
+        //// console.log('');
         if ((gameMode === 'ai') && (_turnCounter === 0)) {
             computer.getAvailMoves();
         };
@@ -359,16 +351,20 @@ const playGame = (() => {
         //// console.log('_oMarks: [' + _oMarks + ']');
     };
     function clearCellStyle() {
-        console.log(boardSpace);
         for (let x = 0; x < 3; x++) {
             let row = boardSpace.children[x];
-            console.log(row);
             for (let y = 0; y < 3; y++) {
                 let cell = row.children[y];
-                console.log(cell);
-                console.log('div#' + cell.id + ' classList.length: ' + cell.classList.length);
+                //// console.log(cell);
+                //// console.log('div#' + cell.id + ' classList.length: ' + cell.classList.length);
+                if (cell.classList !== 'empty') {
+                    cell.classList = 'empty';
+                };
             };
         };
+    };
+    function resetCurrPlayer() {
+        _currPlayer = 0;
     };
 
     // actions
@@ -376,15 +372,16 @@ const playGame = (() => {
 
     // make public to global
     return {
-        getGameMode,    // used by init click event (_gameModeButton)
-        enableCells,    // used by init click event (_startButton)
-        disableCells,   // used by init click event (_startButton -> checkErrors, _restartButton)
-        getPlayers,     // used by init click event (_startButton)
-        setTicker,      // used by init click event (_startButton)
-        clearTicker,    // used by init click event (_restartButton)
-        clearWinMatch,  // used by init click event (_restartButton)
-        clearMoves,     // used by init click event (_restartButton)
-        clearCellStyle, // used by init clicke vent (_restartButton)
+        getGameMode,        // used by init click event (_gameModeButton)
+        enableCells,        // used by init click event (_startButton)
+        disableCells,       // used by init click event (_startButton -> checkErrors, _restartButton)
+        getPlayers,         // used by init click event (_startButton)
+        setTicker,          // used by init click event (_startButton)
+        clearTicker,        // used by init click event (_restartButton)
+        clearWinMatch,      // used by init click event (_restartButton)
+        clearMoves,         // used by init click event (_restartButton)
+        clearCellStyle,     // used by init click event (_restartButton)
+        resetCurrPlayer,    // used by init click event (_restartButton)
     };
 
 })();
@@ -492,6 +489,8 @@ const init = (() => {
         };
     });
     _restartButton.addEventListener('click', () => {
+        playGame.disableCells(boardSpace);
+        playGame.resetCurrPlayer();
         resetGameMode();
         unsetPlayers(players);
         playGame.clearMoves();
