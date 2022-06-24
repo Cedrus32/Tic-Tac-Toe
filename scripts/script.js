@@ -247,7 +247,7 @@ const playGame = (() => {
                     updateAvailMoves(e.target.id);
                     //// console.log('availMoves: ' + availMoves);
                 };
-            } else if (players[_currentPlayer].returnMark() === 'O') {
+            } else if (players[_currPlayer].returnMark() === 'O') {
                 _oMarks.push(e.target.id);
                 //// console.log('_oMarks: ' + _oMarks);
             };
