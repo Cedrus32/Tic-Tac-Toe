@@ -247,17 +247,42 @@ const playGame = (() => {
                     updateAvailMoves(e.target.id);
                     //// console.log('availMoves: ' + availMoves);
                 };
-            } else {
+            } else if (players[_currentPlayer].returnMark() === 'O') {
                 _oMarks.push(e.target.id);
+                //// console.log('_oMarks: ' + _oMarks);
             };
+            //// console.log('');
+            
+            // check for human wins
+            if (_turnCounter >= 5) {
+                console.log('enter checkWin() conditional');
+                if (players[_currPlayer].returnMark() === 'X') {
+                    //// console.log('enter _xMarks winCheck()');
+                    checkWin(_xMarks);
+                } else {
+                    //// console.log('enter _oMarks winCheck()');
+                    checkWin(_oMarks);
+                };
+
+                //// console.log('_winMatch?: ' + _winMatch);
+                //// console.log('');
+
+                // if win, change game mode to 'human'
+                // (triggers correct win message)
+                if (_winMatch) {
+                    gameMode = 'human';
+                }
+            };
+
             // select & mark computer moves
-            if ((gameMode === 'ai') && (_turnCounter < 9)) {
+            if ((gameMode === 'ai') && (_turnCounter < 9) && (!_winMatch)) {
                 _turnCounter++;
+                //// console.log('_turnCounter: ' + _turnCounter);
 
                 // * mark board & update boardArray with computer move
-                //// console.log('computer selects...')
+                console.log('computer selects...')
                 let computerMove = computer.selectMove();
-                console.log(computerMove);
+                //// console.log(computerMove);
                 //// console.log('computerMove: ' + computerMove);
                 computer.markBoard(computerMove);
                 _oMarks.push(computerMove);
@@ -265,38 +290,42 @@ const playGame = (() => {
                 updateAvailMoves(computerMove);
                 //// console.log('availMoves: ' + availMoves);
                 //// console.log('');
-            };
-            // check for wins
-            if (_turnCounter >= 5) {
-                if (players[_currPlayer].returnMark() === 'X') {
-                    checkWin(_xMarks);
-                } else {
+
+                // check for computer wins
+                if (_turnCounter >= 5) {
+                    //// console.log('enter checkWin() conditional');
+                    //// console.log('enter _oMarks winCheck()');
+
                     checkWin(_oMarks);
-                };
-                //// console.log('_winMatch?: ' + _winMatch);
-                //// console.log('');
-                if (_winMatch) {
-                    //// console.log('enter _winMatch conditional');
-                    _tickerMessage = players[_currPlayer].returnName() + ' wins!';
-                    updateTicker(_tickerMessage);
-                    disableCells(boardSpace);
-                    // _turnCounter = 0;
-                } else if ((!_winMatch) && (_turnCounter === 9)) {
-                    //// console.log('enter !_winMatch conditional');
-                    _tickerMessage = "It's a tie.";
-                    updateTicker(_tickerMessage);
-                    // _turnCounter = 0;
+
+                    //// console.log('_winMatch?: ' + _winMatch);
+                    //// console.log('');
                 };
             };
-            // switch human player
-            if (gameMode === 'human') {
-                if ((!_winMatch) && (_turnCounter < 9)) {
-                    switchPlayer();
-                } else if (_turnCounter === 9) {
-                    _turnCounter = 0;
-                } else {
-                    _winMatch = false;
+
+            // set ticker message & next move
+            if (_winMatch) {
+                //// console.log('enter win conditional');
+                if (gameMode === 'human') {
+                    // if human win...
+                    _tickerMessage = players[_currPlayer].returnName() + ' wins!';
+                // ! vv always logs 'Computer wins.' even if human wins in ai mode
+                } else if (gameMode === 'ai') {
+                    _tickerMessage = 'Computer wins.';
                 };
+                updateTicker(_tickerMessage);
+                disableCells(boardSpace);
+                _turnCounter = 0;
+            } else if ((gameMode === 'human') && (_turnCounter < 9) && (!_winMatch)) {
+            // if no human win...
+                //// console.log('enter switchPlayer conditional')
+                switchPlayer();
+            } else if ((!_winMatch) && (_turnCounter === 9)) {
+            // if tie...
+                //// console.log('enter tie conditional');
+                _tickerMessage = "It's a tie.";
+                updateTicker(_tickerMessage);
+                _turnCounter = 0;
             };
         };
     };
@@ -313,9 +342,6 @@ const playGame = (() => {
         for (let set in _wins) {
             _winMatch = _wins[set].every(mark => playerMarks.includes(mark));
             if (_winMatch) {
-                // _tickerMessage = players[_currPlayer].returnName() + ' wins!';
-                // updateTicker(_tickerMessage);
-                // disableCells(boardSpace);
                 break;
             };
         };
@@ -469,7 +495,6 @@ const init = (() => {
         }
         gameMode = button.id;
     }));
-
     _startButton.addEventListener('click', () => {
         //// ('new game mode (start click): ' + gameMode);
         //// console.log('');
@@ -515,10 +540,10 @@ const init = (() => {
 
         //// console.log('game mode: ' + gameMode);
         //// console.log('players: [' + players + ']');
-        //// console.log moves in main function
-        //// console.log availMoves in main function
-        //// console.log boardArray in main function
-        //// console.log _winMatch in main function
+        ////// console.log moves in main function
+        ////// console.log availMoves in main function
+        ////// console.log boardArray in main function
+        ////// console.log _winMatch in main function
         //// console.log('');
     });
 
