@@ -1,9 +1,9 @@
 :root {
-    --xplayer-hover: hsl(231, 53%, 86%, 75%);
-    --icon-xplayer: hsl(231, 33%, 56%);
-    --oplayer-hover: hsl(324, 43%, 86%, 75%);
-    --icon-oplayer: hsl(324, 26%, 68%);
-    --accent: hsl(45, 75%, 60%);
+    --x-mark: hsl(231, 53%, 86%, 75%);
+    /* --icon-xplayer: hsl(231, 33%, 56%); */
+    --o-mark: hsl(324, 43%, 86%, 75%);
+    /* --icon-oplayer: hsl(324, 26%, 68%); */
+    /* --accent: hsl(45, 75%, 60%); */
 
     --dark: hsl(0, 0%, 15%);
     --light: rgb(247, 230, 232);
@@ -83,18 +83,18 @@ button {
     border-radius: 0px 0px 0px var(--border-sml-3);
 }
 
-.x-hover {
-    background-color: var(--xplayer-hover);
+.x-mark {
+    background-color: var(--x-mark);
 }
 
-.x-win {
+/* .x-win {
     background-color: var(--xplayer-win)
+} */
+
+.o-mark {
+    background-color: var(--o-mark);
 }
 
-.o-hover {
-    background-color: var(--oplayer-hover);
-}
-
-.o-win {
+/* .o-win {
     background-color: var(--xplayer-win)
-}
+} */

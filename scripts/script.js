@@ -168,9 +168,6 @@ const playGame = (() => {
     // cache DOM
     const _ticker = document.querySelector('h3');
 
-    // bind listeners
-    // * hover added in clicks
-
     // methods
     function getGameMode(mode) {
         gameMode = mode;
@@ -181,8 +178,8 @@ const playGame = (() => {
             for (let y = 0; y < 3; y++) {
                 let cell = row.children[y]
                 cell.addEventListener('click', markBoard);
-                cell.addEventListener('mouseover', showHover);
-                cell.addEventListener('mouseleave', hideHover);
+                cell.addEventListener('mouseover', showSelectStyle);
+                cell.addEventListener('mouseleave', hideSelectStyle);
             };
         };
     };
@@ -192,34 +189,45 @@ const playGame = (() => {
             for (let y = 0; y < 3; y++) {
                 let cell = row.children[y];
                 cell.removeEventListener('click', markBoard);
-                cell.removeEventListener('mouseover', showHover);
-                cell.removeEventListener('mouseleave', hideHover);
+                cell.removeEventListener('mouseover', showSelectStyle);
+                cell.removeEventListener('mouseleave', hideSelectStyle);
             };
         };
     };
-    function showHover(e) {
+    function showSelectStyle(e) {
+        console.log('mouseover');
         console.log(e.target);
-        console.log(players[_currPlayer].returnMark());
-        e.target.classList.remove('empty');
-        if (players[_currPlayer].returnMark() === 'X') {
-            console.log('add x-hover');
-            e.target.classList.add('x-hover');
-        } else {
-            console.log('add o-hover');
-            e.target.classList.add('o-hover');
+        // console.log(players[_currPlayer].returnMark());
+        console.log((e.target.textContent.length));
+        if (e.target.textContent.length === 0) {
+            e.target.classList.remove('empty');
+            if (players[_currPlayer].returnMark() === 'X') {
+                console.log('add x-mark');
+                e.target.classList.add('x-mark');
+            } else {
+                console.log('add o-mark');
+                e.target.classList.add('o-mark');
+            };
         };
     };
-    function hideHover(e) {
-        console.log(e.target);
-        console.log(players[_currPlayer].returnMark());
-        e.target.classList.add('empty');
-        if (players[_currPlayer].returnMark() === 'X') {
-            console.log('add x-hover');
-            e.target.classList.remove('x-hover');
-        } else {
-            console.log('add o-hover');
-            e.target.classList.remove('o-hover');
+    function hideSelectStyle(e) {
+        console.log('mouseleave');
+        // console.log(e.target);
+        // console.log(players[_currPlayer].returnMark());
+
+        // ! length is never 0 (always either empty, x-mark, o-mark)
+        // ! if vvv removed, removes styling, but doesn't keep for clicked cells
+        if ((e.target.textContent.length === 0) && (e.target.classList !== 'empty')) {
+            e.target.classList.add('empty');
+            if (players[_currPlayer].returnMark() === 'X') {
+                console.log('remove x-mark');
+                e.target.classList.remove('x-mark');
+            } else {
+                console.log('remove o-mark');
+                e.target.classList.remove('o-mark');
+            };
         };
+        console.log(e.target);
     };
     function markBoard(e) {
         //// console.log('new game mode (mark board): ' + gameMode);
@@ -350,6 +358,18 @@ const playGame = (() => {
         //// console.log('_xMarks: [' + _xMarks + ']');
         //// console.log('_oMarks: [' + _oMarks + ']');
     };
+    function clearCellStyle() {
+        console.log(boardSpace);
+        for (let x = 0; x < 3; x++) {
+            let row = boardSpace.children[x];
+            console.log(row);
+            for (let y = 0; y < 3; y++) {
+                let cell = row.children[y];
+                console.log(cell);
+                console.log('div#' + cell.id + ' classList.length: ' + cell.classList.length);
+            };
+        };
+    };
 
     // actions
     gameboard.display();
@@ -364,6 +384,7 @@ const playGame = (() => {
         clearTicker,    // used by init click event (_restartButton)
         clearWinMatch,  // used by init click event (_restartButton)
         clearMoves,     // used by init click event (_restartButton)
+        clearCellStyle, // used by init clicke vent (_restartButton)
     };
 
 })();
@@ -481,7 +502,7 @@ const init = (() => {
         playGame.clearTicker();
         playGame.clearWinMatch();
 
-        playGame.disableCells(boardSpace);
+        playGame.clearCellStyle();
         _startButton.classList.remove('hide');
         _restartButton.classList.add('hide');
         enablePlayerChoice();
