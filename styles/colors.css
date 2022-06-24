@@ -1,9 +1,8 @@
 :root {
-    --x-mark: hsl(231, 53%, 86%, 75%);
-    /* --icon-xplayer: hsl(231, 33%, 56%); */
-    --o-mark: hsl(324, 43%, 86%, 75%);
-    /* --icon-oplayer: hsl(324, 26%, 68%); */
-    /* --accent: hsl(45, 75%, 60%); */
+    --x-mark: hsl(231, 43%, 76%, 75%);
+    /* --x-icon: hsl(231, 33%, 56%); */
+    --o-mark: hsl(324, 36%, 78%, 75%);
+    /* --o-icon: hsl(324, 26%, 68%); */
 
     --dark: hsl(0, 0%, 15%);
     --light: rgb(247, 230, 232);
@@ -43,6 +42,12 @@ button {
 input {
     border: none;
     border-radius: var(--border-sml-2);
+}
+
+.computer-label {
+    background-color: var(--light);
+    border-radius: var(--border-sml-2);
+    
 }
 
 #board-space {
@@ -87,14 +92,6 @@ button {
     background-color: var(--x-mark);
 }
 
-/* .x-win {
-    background-color: var(--xplayer-win)
-} */
-
 .o-mark {
     background-color: var(--o-mark);
 }
-
-/* .o-win {
-    background-color: var(--xplayer-win)
-} */

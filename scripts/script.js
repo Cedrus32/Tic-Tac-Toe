@@ -223,15 +223,15 @@ const playGame = (() => {
     };
     function markBoard(e) {
         //// console.log('new game mode (mark board): ' + gameMode);
-        console.log(boardArray);
-        console.log('');
+        //// console.log(boardArray);
+        //// console.log('');
         if ((gameMode === 'ai') && (_turnCounter === 0)) {
             computer.getAvailMoves();
         };
         if (markValid(e) === true) {
             // count human turn
             _turnCounter++;
-            console.log('_turnCounter: ' + _turnCounter);
+            //// console.log('_turnCounter: ' + _turnCounter);
 
             // * mark board & update boardArray with human move
             //// console.log('human selects...')
@@ -273,16 +273,16 @@ const playGame = (() => {
                 } else {
                     checkWin(_oMarks);
                 };
-                console.log('_winMatch?: ' + _winMatch);
-                console.log('');
+                //// console.log('_winMatch?: ' + _winMatch);
+                //// console.log('');
                 if (_winMatch) {
-                    console.log('enter _winMatch conditional');
+                    //// console.log('enter _winMatch conditional');
                     _tickerMessage = players[_currPlayer].returnName() + ' wins!';
                     updateTicker(_tickerMessage);
                     disableCells(boardSpace);
                     // _turnCounter = 0;
                 } else if ((!_winMatch) && (_turnCounter === 9)) {
-                    console.log('enter !_winMatch conditional');
+                    //// console.log('enter !_winMatch conditional');
                     _tickerMessage = "It's a tie.";
                     updateTicker(_tickerMessage);
                     // _turnCounter = 0;
@@ -322,7 +322,7 @@ const playGame = (() => {
     };
     function updateTicker() {
         _ticker.textContent = _tickerMessage;
-        console.log('ticker updated to: ' + _ticker.textContent);
+        //// console.log('ticker updated to: ' + _ticker.textContent);
     };
     function switchPlayer() {
         if (players[_currPlayer].returnMark() === 'X') {
@@ -441,7 +441,6 @@ const init = (() => {
 
     // bind listeners
     _gameModeButtons.forEach(button => button.addEventListener('click', (e) => {
-        // ! pull out into separate functions
         if (e.target.id === 'ai') {
             //// console.log('switch to computer opponent');
             // deselect human
@@ -450,6 +449,7 @@ const init = (() => {
             // select computer
             e.target.src='./assets/computer-sel.svg';
             e.target.classList.add('selected');
+            e.target.parentElement.previousElementSibling.classList.add('computer-label');
             // show computer label
             _inputO.value = 'computer';
             showName(_labelO, _inputO);
@@ -458,9 +458,11 @@ const init = (() => {
             // deselect computer
             _gameModeButtons[1].src='./assets/computer.svg';
             _gameModeButtons[1].classList.remove('selected');
+            e.target.parentElement.previousElementSibling.classList.remove('computer-label');
             // select human
             e.target.src='./assets/human-sel.svg';
             e.target.classList.add('selected');
+
             // show human input
             clearInput(_inputO);
             hideName(_labelO, _inputO);
@@ -480,6 +482,7 @@ const init = (() => {
         // init game
         if (_form.checkValidity() === true) {
             disablePlayerChoice();
+            _labelO.classList = '';
             setPlayer(_inputX);
             setPlayer(_inputO);
 
