@@ -23,6 +23,8 @@ const gameboard = (() => {
             } else {
                 cellDiv = document.createElement('div');
                 cellDiv.id = cellCounter;
+                cellDiv.classList.add('empty');
+                console.log(cellDiv);
                 rowDiv.appendChild(cellDiv);
                 cellCounter++;
             };
@@ -114,6 +116,7 @@ const computer = (() => {
                 if (cell.id === move) {
                     //// console.log('cell: cell[' + cell.id + ']');
                     cell.textContent = 'O';
+                    boardArray[cell.id] = 'O';
                 };
             };
         };
@@ -165,31 +168,63 @@ const playGame = (() => {
     // cache DOM
     const _ticker = document.querySelector('h3');
 
+    // bind listeners
+    // * hover added in clicks
+
     // methods
     function getGameMode(mode) {
         gameMode = mode;
     };
-    function addClicks(board) {
+    function enableCells(board) {
         for (let x = 0; x < 3; x++) {
             let row = board.children[x];
             for (let y = 0; y < 3; y++) {
                 let cell = row.children[y]
                 cell.addEventListener('click', markBoard);
+                cell.addEventListener('mouseover', showHover);
+                cell.addEventListener('mouseleave', hideHover);
             };
         };
     };
-    function removeClicks(board) {
+    function disableCells(board) {
         for (let x = 0; x < 3; x++) {
             let row = board.children[x];
             for (let y = 0; y < 3; y++) {
                 let cell = row.children[y];
                 cell.removeEventListener('click', markBoard);
+                cell.removeEventListener('mouseover', showHover);
+                cell.removeEventListener('mouseleave', hideHover);
             };
+        };
+    };
+    function showHover(e) {
+        console.log(e.target);
+        console.log(players[_currPlayer].returnMark());
+        e.target.classList.remove('empty');
+        if (players[_currPlayer].returnMark() === 'X') {
+            console.log('add x-hover');
+            e.target.classList.add('x-hover');
+        } else {
+            console.log('add o-hover');
+            e.target.classList.add('o-hover');
+        };
+    };
+    function hideHover(e) {
+        console.log(e.target);
+        console.log(players[_currPlayer].returnMark());
+        e.target.classList.add('empty');
+        if (players[_currPlayer].returnMark() === 'X') {
+            console.log('add x-hover');
+            e.target.classList.remove('x-hover');
+        } else {
+            console.log('add o-hover');
+            e.target.classList.remove('o-hover');
         };
     };
     function markBoard(e) {
         //// console.log('new game mode (mark board): ' + gameMode);
-        //// console.log('');
+        console.log(boardArray);
+        console.log('');
         if ((gameMode === 'ai') && (_turnCounter === 0)) {
             computer.getAvailMoves();
         };
@@ -203,10 +238,11 @@ const playGame = (() => {
             e.target.textContent = players[_currPlayer].returnMark();
             boardArray[e.target.id] = players[_currPlayer].returnMark();
 
-            // mark human moves
+            // log human moves
             if (players[_currPlayer].returnMark() === 'X') {
                 _xMarks.push(e.target.id);
                 //// console.log('_xMarks: ' + _xMarks);
+                // share human move with computer's available moves
                 if (gameMode === 'ai') {
                     updateAvailMoves(e.target.id);
                     //// console.log('availMoves: ' + availMoves);
@@ -221,6 +257,7 @@ const playGame = (() => {
                 // * mark board & update boardArray with computer move
                 //// console.log('computer selects...')
                 let computerMove = computer.selectMove();
+                console.log(computerMove);
                 //// console.log('computerMove: ' + computerMove);
                 computer.markBoard(computerMove);
                 _oMarks.push(computerMove);
@@ -242,7 +279,7 @@ const playGame = (() => {
                     //// console.log('enter _winMatch conditional');
                     _tickerMessage = players[_currPlayer].returnName() + ' wins!';
                     updateTicker(_tickerMessage);
-                    removeClicks(boardSpace);
+                    disableCells(boardSpace);
                     _turnCounter = 0;
                 } else if ((!_winMatch) && (_turnCounter === 9)) {
                     _tickerMessage = "It's a tie.";
@@ -275,7 +312,7 @@ const playGame = (() => {
             if (_winMatch) {
                 // _tickerMessage = players[_currPlayer].returnName() + ' wins!';
                 // updateTicker(_tickerMessage);
-                // removeClicks(boardSpace);
+                // disableCells(boardSpace);
                 break;
             };
         };
@@ -320,8 +357,8 @@ const playGame = (() => {
     // make public to global
     return {
         getGameMode,    // used by init click event (_gameModeButton)
-        addClicks,      // used by init click event (_startButton)
-        removeClicks,   // used by init click event (_startButton -> checkErrors, _restartButton)
+        enableCells,    // used by init click event (_startButton)
+        disableCells,   // used by init click event (_startButton -> checkErrors, _restartButton)
         getPlayers,     // used by init click event (_startButton)
         setTicker,      // used by init click event (_startButton)
         clearTicker,    // used by init click event (_restartButton)
@@ -427,7 +464,7 @@ const init = (() => {
             playGame.getPlayers(players);
             playGame.setTicker();
             playGame.getGameMode(gameMode);
-            playGame.addClicks(boardSpace);
+            playGame.enableCells(boardSpace);
 
             _startButton.classList.add('hide');
             _restartButton.classList.remove('hide');
@@ -444,7 +481,7 @@ const init = (() => {
         playGame.clearTicker();
         playGame.clearWinMatch();
 
-        playGame.removeClicks(boardSpace);
+        playGame.disableCells(boardSpace);
         _startButton.classList.remove('hide');
         _restartButton.classList.add('hide');
         enablePlayerChoice();
@@ -500,11 +537,9 @@ const init = (() => {
         showElement(label); // shows label
     };
     function enablePlayerChoice() {
-        console.log(_gameModeFilter.classList);
         _gameModeFilter.classList.add('hide');
     }
     function disablePlayerChoice() {
-        console.log(_gameModeFilter.classList);
         _gameModeFilter.classList.remove('hide');
     };
     function unsetPlayers(players) {

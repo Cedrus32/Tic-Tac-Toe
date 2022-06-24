@@ -1,6 +1,6 @@
 :root {
     --shrink: 1vw;
-    --body-padding: 2rem;
+    --body-padding: 1rem;
     --input-width: 20vw;
     --input-sibling-padding: 0.35em;
     --setplayers-width-min: calc(2 * var(--input-width));
@@ -65,7 +65,7 @@ body {
                 top: 0px; left: 0px;
                 height: 100%;
                 width: 100%;
-                
+
                 background-color: transparent;
             }
 

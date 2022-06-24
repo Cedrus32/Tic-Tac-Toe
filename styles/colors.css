@@ -1,8 +1,8 @@
 :root {
-    --xplayer-main: hsl(250, 50%, 40%);
-    --xplayer-light: hsl(250, 75%, 75%);
-    --oplayer-main: hsl(20, 75%, 50%);
-    --oplayer-light: hsl(20, 100%, 75%);
+    --xplayer-hover: hsl(231, 53%, 86%, 75%);
+    --icon-xplayer: hsl(231, 33%, 56%);
+    --oplayer-hover: hsl(324, 43%, 86%, 75%);
+    --icon-oplayer: hsl(324, 26%, 68%);
     --accent: hsl(45, 75%, 60%);
 
     --dark: hsl(0, 0%, 15%);
@@ -51,7 +51,7 @@ input {
     border-radius: var(--border-sml-2);
 }
 
-#board-space .row div,
+div .empty,
 input,
 button {
     background-color: var(--light-alpha-2);
@@ -83,10 +83,18 @@ button {
     border-radius: 0px 0px 0px var(--border-sml-3);
 }
 
-.x {
-    background-color: var(--xplayer-main);
+.x-hover {
+    background-color: var(--xplayer-hover);
 }
 
-.o {
-    background-color: var(--oplayer-main);
+.x-win {
+    background-color: var(--xplayer-win)
+}
+
+.o-hover {
+    background-color: var(--oplayer-hover);
+}
+
+.o-win {
+    background-color: var(--xplayer-win)
 }
