@@ -223,15 +223,15 @@ const playGame = (() => {
     };
     function markBoard(e) {
         //// console.log('new game mode (mark board): ' + gameMode);
-        //// console.log(boardArray);
-        //// console.log('');
+        console.log(boardArray);
+        console.log('');
         if ((gameMode === 'ai') && (_turnCounter === 0)) {
             computer.getAvailMoves();
         };
         if (markValid(e) === true) {
             // count human turn
             _turnCounter++;
-            //// console.log('_turnCounter: ' + _turnCounter);
+            console.log('_turnCounter: ' + _turnCounter);
 
             // * mark board & update boardArray with human move
             //// console.log('human selects...')
@@ -273,27 +273,30 @@ const playGame = (() => {
                 } else {
                     checkWin(_oMarks);
                 };
-                //// console.log('_winMatch?: ' + _winMatch);
-                //// console.log('');
+                console.log('_winMatch?: ' + _winMatch);
+                console.log('');
                 if (_winMatch) {
-                    //// console.log('enter _winMatch conditional');
+                    console.log('enter _winMatch conditional');
                     _tickerMessage = players[_currPlayer].returnName() + ' wins!';
                     updateTicker(_tickerMessage);
                     disableCells(boardSpace);
-                    _turnCounter = 0;
+                    // _turnCounter = 0;
                 } else if ((!_winMatch) && (_turnCounter === 9)) {
+                    console.log('enter !_winMatch conditional');
                     _tickerMessage = "It's a tie.";
                     updateTicker(_tickerMessage);
-                    _turnCounter = 0;
+                    // _turnCounter = 0;
                 };
             };
             // switch human player
             if (gameMode === 'human') {
                 if ((!_winMatch) && (_turnCounter < 9)) {
                     switchPlayer();
+                } else if (_turnCounter === 9) {
+                    _turnCounter = 0;
                 } else {
                     _winMatch = false;
-                }
+                };
             };
         };
     };
@@ -319,6 +322,7 @@ const playGame = (() => {
     };
     function updateTicker() {
         _ticker.textContent = _tickerMessage;
+        console.log('ticker updated to: ' + _ticker.textContent);
     };
     function switchPlayer() {
         if (players[_currPlayer].returnMark() === 'X') {
