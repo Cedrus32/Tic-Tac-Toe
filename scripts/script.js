@@ -470,10 +470,10 @@ const init = (() => {
         if (e.target.id === 'ai') {
             //// console.log('switch to computer opponent');
             // deselect human
-            _gameModeButtons[0].src='./assets/human.svg';
+            _gameModeButtons[0].src='./assets/player-ico/human.svg';
             _gameModeButtons[0].classList.remove('selected');
             // select computer
-            e.target.src='./assets/computer-sel.svg';
+            e.target.src='./assets/player-ico/computer-sel.svg';
             e.target.classList.add('selected');
             e.target.parentElement.previousElementSibling.classList.add('computer-label');
             // show computer label
@@ -482,11 +482,11 @@ const init = (() => {
         } else if (e.target.id === 'human') {
             //// console.log('switch to human opponent');
             // deselect computer
-            _gameModeButtons[1].src='./assets/computer.svg';
+            _gameModeButtons[1].src='./assets/player-ico/computer.svg';
             _gameModeButtons[1].classList.remove('selected');
             e.target.parentElement.previousElementSibling.classList.remove('computer-label');
             // select human
-            e.target.src='./assets/human-sel.svg';
+            e.target.src='./assets/player-ico/human-sel.svg';
             e.target.classList.add('selected');
 
             // show human input
@@ -627,10 +627,10 @@ const init = (() => {
         if (gameMode === 'ai') {
             // deselect computer
             _gameModeButtons[1].classList.remove('selected');
-            _gameModeButtons[1].src='./assets/computer.svg';
+            _gameModeButtons[1].src='./assets/player-ico/computer.svg';
             // select human
             _gameModeButtons[0].classList.add('selected');
-            _gameModeButtons[0].src='./assets/human-sel.svg';
+            _gameModeButtons[0].src='./assets/player-ico/human-sel.svg';
             gameMode = 'human';
         };
     };
