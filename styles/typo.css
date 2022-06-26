@@ -27,6 +27,7 @@ label {
 
 h3 {
     font-size: var(--ticker);
+    text-align: center;
 }
 
 #board-space {

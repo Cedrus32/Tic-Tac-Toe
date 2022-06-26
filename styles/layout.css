@@ -37,16 +37,21 @@ body {
         width: auto;
     }
 
+        input,
+        label {
+            padding: 0.1em;
+        }
+
         input {
             text-align: center;
             width: var(--input-width);
-            padding: 0.1em;
+            /* padding: 0.1em; */
         }
 
         label {
             line-height: 1.15em;
             min-width: calc(var(--input-width));
-            padding: 0.1em;
+            /* padding: 0.1em; */
         }
 
         .player-desc {
@@ -80,8 +85,12 @@ h3 {
     position: relative;
     top: 0px;
 
-    min-height: 1.15em;
-    margin: 0em 0em;
+    min-height: 1.55em;
+    margin: 0em;
+}
+
+h3:not(:empty) {
+    padding: 0.2em;
 }
 
 #game-container {
