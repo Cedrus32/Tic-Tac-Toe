@@ -4,6 +4,6 @@
 <svg height="100%" stroke-miterlimit="10" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" version="1.1" viewBox="0 0 24 24" width="100%" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 <defs/>
 <g id="Untitled">
-<path d="M6 2C4.89 2 4 2.89 4 4L4 12C4 13.11 4.89 14 6 14L18 14C19.11 14 20 13.11 20 12L20 4C20 2.89 19.11 2 18 2L6 2M6 4L18 4L18 12L6 12L6 4M4 15C2.89 15 2 15.89 2 17L2 20C2 21.11 2.89 22 4 22L20 22C21.11 22 22 21.11 22 20L22 17C22 15.89 21.11 15 20 15L4 15M8 17L20 17L20 20L8 20L8 17M9 17.75L9 19.25L13 19.25L13 17.75L9 17.75M15 17.75L15 19.25L19 19.25L19 17.75L15 17.75Z" fill="#726e85" fill-rule="evenodd" opacity="1" stroke="none"/>
+<path d="M3.55 19.09L4.96 20.5L6.76 18.71L5.34 17.29M12 6C8.69 6 6 8.69 6 12C6 15.31 8.69 18 12 18C15.31 18 18 15.31 18 12C18 8.68 15.31 6 12 6M20 13L23 13L23 11L20 11M17.24 18.71L19.04 20.5L20.45 19.09L18.66 17.29M20.45 5L19.04 3.6L17.24 5.39L18.66 6.81M13 1L11 1L11 4L13 4M6.76 5.39L4.96 3.6L3.55 5L5.34 6.81L6.76 5.39M1 13L4 13L4 11L1 11M13 20L11 20L11 23L13 23" fill="#726e85" fill-rule="evenodd" opacity="1" stroke="none"/>
 </g>
 </svg>
