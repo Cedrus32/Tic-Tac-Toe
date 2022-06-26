@@ -1,0 +1,48 @@
+:root {
+    --border-lrg: 1rem;
+    --border-sml-1: 0.75rem;
+    --border-sml-2: 0.5rem;
+    --border-sml-3: 0.35rem;
+}
+
+.player-container {
+    border-radius: var(--border-lrg);
+}
+
+.player-fieldset {
+    border: none;
+}
+
+button {
+    border-radius: var(--border-sml-1);
+}
+
+input {
+    border: none;
+    border-radius: var(--border-sml-2);
+}
+
+.computer-label {
+    border-radius: var(--border-sml-2);
+    
+}
+
+#board-space {
+    border-radius: var(--border-sml-2);
+}
+
+#board-space .row:nth-child(1) div:nth-child(1) {
+    border-radius: var(--border-sml-3) 0px 0px 0px;
+}
+
+#board-space .row:nth-child(1) div:nth-child(3) {
+    border-radius: 0px var(--border-sml-3) 0px 0px;
+}
+
+#board-space .row:nth-child(3) div:nth-child(3) {
+    border-radius: 0px 0px var(--border-sml-3) 0px;
+}
+
+#board-space .row:nth-child(3) div:nth-child(1) {
+    border-radius: 0px 0px 0px var(--border-sml-3);
+}

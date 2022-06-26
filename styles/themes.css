@@ -13,7 +13,6 @@
 
     .theme-box img {
         position: absolute;
-        /* width: var(--icon-width); */
 
         transition: all 0.25s ease;
     }
