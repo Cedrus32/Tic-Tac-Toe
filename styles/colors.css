@@ -8,7 +8,6 @@
     --light: rgb(247, 230, 232);
     --light-alpha-1: rgb(247, 230, 232, 75%);
     --light-alpha-2: rgb(247, 230, 232, 90%);
-    --icon-sel: #9388A4;
 
     --border-lrg: 1rem;
     --border-sml-1: 0.75rem;
@@ -17,7 +16,7 @@
 }
 
 body {
-    background-image: url('../assets/bg/dawn.svg');
+    background-image: url('../assets/dawn/bg.svg');
     background-position: center bottom;
     background-size: cover;
 

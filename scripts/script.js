@@ -470,7 +470,7 @@ const init = (() => {
         if (e.target.id === 'ai') {
             //// console.log('switch to computer opponent');
             // deselect human
-            _gameModeButtons[0].src='./assets/player-ico/human.svg';
+            _gameModeButtons[0].src='./assets/dawn/human.svg';
             _gameModeButtons[0].classList.remove('selected');
             // select computer
             e.target.src='./assets/player-ico/computer-sel.svg';
@@ -482,7 +482,7 @@ const init = (() => {
         } else if (e.target.id === 'human') {
             //// console.log('switch to human opponent');
             // deselect computer
-            _gameModeButtons[1].src='./assets/player-ico/computer.svg';
+            _gameModeButtons[1].src='./assets/dawn/computer.svg';
             _gameModeButtons[1].classList.remove('selected');
             e.target.parentElement.previousElementSibling.classList.remove('computer-label');
             // select human
