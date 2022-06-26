@@ -27,16 +27,13 @@ button {
     border: 1px solid var(--dark);
 }
 
-.computer-label {
-    background-color: var(--light);
-}
-
 #board-space {
     border: 2px solid var(--dark);
 }
 
 div .empty,
 input,
+.computer-label,
 button,
 h3 {
     background-color: var(--light-alpha-2);
