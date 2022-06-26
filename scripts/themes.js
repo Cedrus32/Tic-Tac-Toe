@@ -13,7 +13,7 @@ const themeSwitcher = (() => {
         let icon;
         
         for (let i = 0; i < (_themeBox.children.length); i++) {
-            console.log('BEFORE CHANGE...')
+            // console.log('BEFORE CHANGE...')
             icon = _themeBox.children[i];
             if (i === 0) {
                 next = _themeBox.children[1];
@@ -25,15 +25,15 @@ const themeSwitcher = (() => {
                 next = _themeBox.children[i + 1];
                 prev = _themeBox.children[i - 1];
             }
-            console.log(icon);
-            console.log(next);
-            console.log(prev);
+            // console.log(icon);
+            // console.log(next);
+            // console.log(prev);
 
-            console.log('AFTER CHANGE...')
+            // console.log('AFTER CHANGE...')
             changeTheme(icon);
-            console.log(icon);
-            console.log(next);
-            console.log(prev);
+            // console.log(icon);
+            // console.log(next);
+            // console.log(prev);
         };
     };
     function changeTheme(icon) {
