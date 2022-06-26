@@ -2,7 +2,7 @@
     --shrink: 1vw;
     --body-padding: 1rem;
     --input-width: 20vw;
-    --input-sibling-padding: 0.35em;
+    --input-sibling-gap: 0.35em;
     --setplayers-width-min: calc(2 * var(--input-width));
     --setplayers-width-max: calc(10 + var(--setplayers-width-min));
     --cell-edge: 2.5em;
@@ -24,6 +24,7 @@ body {
 
 .player-container {
     display: flex;
+    align-items: center;
 }
 
     .player-fieldset {
@@ -31,6 +32,7 @@ body {
         flex-flow: column;
         justify-content: center;
         align-items: center;
+        gap: var(--input-sibling-gap);
 
         width: auto;
     }
@@ -39,10 +41,6 @@ body {
             text-align: center;
             width: var(--input-width);
             padding: 0.1em;
-        }
-
-        .legend {
-            margin-bottom: var(--input-sibling-padding);
         }
 
         label {
@@ -57,7 +55,6 @@ body {
             justify-content: center;
             align-items: center;
             gap: 1rem;
-            margin-top: var(--input-sibling-padding);
         }
 
             .mode-filter {
@@ -72,6 +69,8 @@ body {
             .player-desc img {
                 height: calc(1em + var(--shrink));
             }
+
+/* theme container positioned & styled in themes.css */
 
 button {
     padding: 0.30em;
