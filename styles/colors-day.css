@@ -5,9 +5,9 @@
     /* --o-icon: hsl(46, 88%, 87%); */
 
     --dark: hsl(0, 0%, 15%);
-    --light: rgb(255, 255, 255);
-    --light-alpha-1: rgb(255, 255, 255, 75%);
-    --light-alpha-2: rgb(255, 255, 255, 90%);
+    --light: rgb(242, 253, 244);
+    --light-alpha-1: rgb(242, 253, 244, 75%);
+    --light-alpha-2: rgb(242, 253, 244, 90%);
 }
 
 body {
