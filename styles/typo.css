@@ -4,7 +4,7 @@
     /* --shrink: 1vw; */
     --title: calc(1.75rem + var(--shrink));
     --ui: calc(0.5rem + var(--shrink));
-    --ticker: calc(1rem + var(--shrink));
+    --ticker: calc(0.75rem + var(--shrink));
     --board: calc(2.5rem + var(--shrink));
 }
 
