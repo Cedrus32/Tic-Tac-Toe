@@ -474,7 +474,6 @@ const init = (() => {
             _gameModeButtons[0].classList.remove('selected');
             // select computer
             e.target.classList.add('selected');
-            e.target.parentElement.previousElementSibling.classList.add('computer-label');
             // show computer label
             _inputO.value = 'computer';
             showName(_labelO, _inputO);
@@ -482,7 +481,6 @@ const init = (() => {
             //// console.log('switch to human opponent');
             // deselect computer
             _gameModeButtons[1].classList.remove('selected');
-            e.target.parentElement.previousElementSibling.classList.remove('computer-label');
             // select human
             e.target.classList.add('selected');
 

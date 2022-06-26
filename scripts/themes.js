@@ -6,8 +6,6 @@ const themeSwitcher = (() => {
     const _themeBox = document.querySelector('div.theme-box');
     const _gameModeButtons = document.querySelectorAll('img.game-mode');
     const _restartButton = document.getElementById('restart');
-    const _iconHuman = document.getElementById('human');
-    const _iconAI = document.getElementById('ai');
     let styleSheet = document.getElementById('theme');
     let _theme = document.getElementById('theme').classList[0];
     // console.log({styleSheet});
@@ -24,11 +22,13 @@ const themeSwitcher = (() => {
             _gameModeButtons[0].src='./assets/' + _theme + '/human.svg';
             // select computer
             e.target.src='./assets/player-ico/computer-sel.svg';
+            e.target.parentElement.previousElementSibling.classList.add('computer-label');
         } else if (e.target.id === 'human') {
             _gameMode = 'human';
             //// console.log('switch to human opponent');
             // deselect computer
             _gameModeButtons[1].src='./assets/' + _theme + '/computer.svg';
+            e.target.parentElement.previousElementSibling.classList.remove('computer-label');
             // select human
             e.target.src='./assets/player-ico/human-sel.svg';
         }
