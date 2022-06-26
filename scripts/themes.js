@@ -1,19 +1,37 @@
 const themeSwitcher = (() => {
     // cache DOM
-    let _themeBox = document.querySelector('div.theme-box');
+    const _themeBox = document.querySelector('div.theme-box');
+    const _gameModeButtons = document.querySelectorAll('img.game-mode');
+    const _restartButton = document.getElementById('restart');
+    const _selectAI = document.getElementById('ai');
     let styleSheet = document.getElementById('theme');
-    _selectAI = document.getElementById('ai');
+    let _theme = document.getElementById('theme').classList[0];
     // console.log({styleSheet});
 
     // bind listeners
     _themeBox.addEventListener('click', switchTheme);
+    _gameModeButtons.forEach(button => button.addEventListener('click', (e) => {
+        _theme = document.getElementById('theme').classList[0];
+        if (e.target.id === 'ai') {
+            //// console.log('switch to computer opponent');
+            // deselect human
+            _gameModeButtons[0].src='./assets/' + _theme + '/human.svg';
+        } else if (e.target.id === 'human') {
+            //// console.log('switch to human opponent');
+            // deselect computer
+            _gameModeButtons[1].src='./assets/' + _theme + '/computer.svg';
+        }
+    }));
+    _restartButton.addEventListener('click', () => {
+        _gameModeButtons[1].src='./assets/' + _theme + '/computer.svg';
+    });
 
     // methods
     function switchTheme() {
+        _theme = document.getElementById('theme').classList[0];
         let icon;
         
         for (let i = 0; i < (_themeBox.children.length); i++) {
-            // console.log('BEFORE CHANGE...')
             icon = _themeBox.children[i];
             if (i === 0) {
                 next = _themeBox.children[1];
@@ -22,19 +40,11 @@ const themeSwitcher = (() => {
                 next = _themeBox.children[0];
                 prev = _themeBox.children[4];
             } else if (0 < i < 5) {
-                console.log(icon);
                 next = _themeBox.children[i + 1];
                 prev = _themeBox.children[i - 1];
             }
-            // console.log(icon);
-            // console.log(next);
-            // console.log(prev);
 
-            // console.log('AFTER CHANGE...')
             changeTheme(icon);
-            // console.log(icon);
-            // console.log(next);
-            // console.log(prev);
         };
     };
     function changeTheme(icon) {
@@ -55,7 +65,7 @@ const themeSwitcher = (() => {
             icon.classList.remove('next');
             icon.src = 'assets/theme-ico/' + icon.id + '.svg';
             styleSheet.classList = icon.id;
-            styleSheet.href = './styles/colors-' + icon.id + '.css';
+            styleSheet.href = './styles/themes/' + icon.id + '.css';
             _selectAI.src = './assets/' + icon.id + '/computer.svg';
         } else if (icon.classList.contains('n-next')) {
             icon.classList.add('next');
