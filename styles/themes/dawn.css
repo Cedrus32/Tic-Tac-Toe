@@ -28,7 +28,7 @@ button {
 }
 
 .computer-label {
-    background-color: var(--light); 
+    background-color: var(--light);
 }
 
 #board-space {
@@ -37,8 +37,13 @@ button {
 
 div .empty,
 input,
-button {
+button,
+h3 {
     background-color: var(--light-alpha-2);
+}
+
+h3:not(:empty) {
+    border: 1px solid var(--dark);
 }
 
 #board-space .row:nth-child(1),
