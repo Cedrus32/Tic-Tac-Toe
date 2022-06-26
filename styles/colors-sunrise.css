@@ -1,0 +1,60 @@
+:root {
+    --x-mark: hsl(207, 61%, 72%, 75%);
+    /* --x-icon: hsl(207, 44%, 65%); */
+    --o-mark: hsl(46, 88%, 87%, 75%);
+    /* --o-icon: hsl(46, 61%, 79%); */
+
+    --dark: hsl(0, 0%, 15%);
+    --light: rgb(226, 238, 255);
+    --light-alpha-1: rgb(226, 238, 255, 75%);
+    --light-alpha-2: rgb(226, 238, 255, 90%);
+}
+
+body {
+    background-image: url('../assets/sunrise/bg.svg');
+    background-position: center bottom;
+    background-size: cover;
+
+    color: var(--dark);
+}
+
+.player-container {
+    background-color: var(--light-alpha-1);
+    border: 1px solid var(--dark);
+}
+
+button {
+    border: 1px solid var(--dark);
+}
+
+.computer-label {
+    background-color: var(--light); 
+}
+
+#board-space {
+    border: 2px solid var(--dark);
+}
+
+div .empty,
+input,
+button {
+    background-color: var(--light-alpha-2);
+}
+
+#board-space .row:nth-child(1),
+#board-space .row:nth-child(2) {
+    border-bottom: 2px solid var(--dark);
+}
+
+#board-space .row div:nth-child(1),
+#board-space .row div:nth-child(2) {
+    border-right: 2px solid var(--dark);
+}
+
+.x-mark {
+    background-color: var(--x-mark);
+}
+
+.o-mark {
+    background-color: var(--o-mark);
+}

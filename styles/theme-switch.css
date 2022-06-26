@@ -25,7 +25,6 @@
 .next,
 .prev {
     opacity: 0.35;
-    /* transform: scale(0.5); */
     width: calc(0.75 * var(--icon-width));
 }
 
