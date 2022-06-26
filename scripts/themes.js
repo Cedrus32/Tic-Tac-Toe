@@ -21,7 +21,8 @@ const themeSwitcher = (() => {
             } else if (i === 5) {
                 next = _themeBox.children[0];
                 prev = _themeBox.children[4];
-            } else {
+            } else if (0 < i < 5) {
+                console.log(icon);
                 next = _themeBox.children[i + 1];
                 prev = _themeBox.children[i - 1];
             }
