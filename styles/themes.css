@@ -1,0 +1,57 @@
+:root {
+    --icon-width: calc(1em + var(--shrink));
+}
+
+.theme-box {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 100%; width: var(--icon-width);
+}
+
+    .theme-box img {
+        position: absolute;
+        /* width: var(--icon-width); */
+
+        transition: all 0.25s ease;
+    }
+
+.curr {
+    opacity: 1;
+    width: var(--icon-width);
+}
+
+.next,
+.prev {
+    opacity: 0.35;
+    /* transform: scale(0.5); */
+    width: calc(0.75 * var(--icon-width));
+}
+
+.next {
+    transform: translateY(-1.5em);
+}
+
+.prev {
+    transform: translateY(1.5em);
+}
+
+.n-next,
+.p-prev {
+    opacity: 0;
+    clip: rect(0px, 0px, 0px, 0px);
+}
+
+.n-next {
+    bottom: 100%;
+}
+
+.p-prev {
+    top: 100%;
+}
+
+.hide {
+    display: none;
+}
