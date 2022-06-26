@@ -476,7 +476,9 @@ const init = (() => {
             //* ************* */
             _gameModeButtons[0].classList.remove('selected');
             // select computer
-            e.target.src='./assets/player-ico/computer-sel.svg';
+            //* ************* */
+            // e.target.src='./assets/player-ico/computer-sel.svg';
+            //* ************* */
             e.target.classList.add('selected');
             e.target.parentElement.previousElementSibling.classList.add('computer-label');
             // show computer label
@@ -491,7 +493,9 @@ const init = (() => {
             _gameModeButtons[1].classList.remove('selected');
             e.target.parentElement.previousElementSibling.classList.remove('computer-label');
             // select human
-            e.target.src='./assets/player-ico/human-sel.svg';
+            //* ************* */
+            // e.target.src='./assets/player-ico/human-sel.svg';
+            //* ************* */
             e.target.classList.add('selected');
 
             // show human input
@@ -637,7 +641,9 @@ const init = (() => {
             //* ************* */
             // select human
             _gameModeButtons[0].classList.add('selected');
-            _gameModeButtons[0].src='./assets/player-ico/human-sel.svg';
+            //* ************* */
+            // _gameModeButtons[0].src='./assets/player-ico/human-sel.svg';
+            //* ************* */
             gameMode = 'human';
         };
     };
