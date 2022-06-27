@@ -55,6 +55,13 @@ body {
             min-width: calc(var(--input-width));
         }
 
+        select {
+            /* display: none; */
+            background-color: var(--light);
+            border: none;
+            border-radius: var(--border-sml-2);
+        }
+
 /* player switch styled in player-switch.css */
 
 /* theme container styled in themes-switch.css */
