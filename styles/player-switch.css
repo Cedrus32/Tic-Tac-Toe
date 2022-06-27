@@ -1,0 +1,35 @@
+.player-desc {
+    height: var(--icon-size);
+}
+
+div.game-mode {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+    .mode-filter {
+        position: absolute;
+        top: 0px; left: 0px;
+        height: 100%;
+        width: 100%;
+
+        background-color: transparent;
+    }
+
+    img.game-mode {
+        position: absolute;
+        transition: all 0.25s ease;
+    }
+
+    img.game-mode:not(.selected) {
+        left: 0px;
+        transform: translateX(0.5em);
+        opacity: 0.35;
+        width: var(--icon-shrink);
+    }
+
+    img.game-mode.selected {
+        right: 0px;
+        transform: translateX(-0.5em);
+    }

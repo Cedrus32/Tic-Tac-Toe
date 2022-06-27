@@ -6,6 +6,8 @@
     --setplayers-width-min: calc(2 * var(--input-width));
     --setplayers-width-max: calc(10 + var(--setplayers-width-min));
     --cell-edge: 2.5em;
+    --icon-size: calc(1em + var(--shrink));
+    --icon-shrink: calc(0.75 * var(--icon-size));
 }
 
 body {
@@ -52,28 +54,9 @@ body {
             min-width: calc(var(--input-width));
         }
 
-        .player-desc {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 1rem;
-        }
+/* player switch position & styled in player-switch.css */
 
-            .mode-filter {
-                position: absolute;
-                top: 0px; left: 0px;
-                height: 100%;
-                width: 100%;
-
-                background-color: transparent;
-            }
-
-            .player-desc img {
-                height: calc(1em + var(--shrink));
-            }
-
-/* theme container positioned & styled in themes.css */
+/* theme container positioned & styled in themes-switch.css */
 
 button {
     padding: 0.30em;
