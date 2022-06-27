@@ -606,10 +606,6 @@ const init = (() => {
     };
     function resetGameMode() {
         if (gameMode === 'ai') {
-            // deselect computer
-            _gameModeButtons[1].classList.remove('selected');
-            // select human
-            _gameModeButtons[0].classList.add('selected');
             gameMode = 'human';
         };
     };
