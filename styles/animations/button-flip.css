@@ -1,4 +1,33 @@
+@keyframes flip-in {
+    0% {transform: translateX(0em); z-index: -1;}
+    50% {transform: translateX(-3em);}
+    100% {transform: translateX(0em); z-index: 1;}
+}
+
+@keyframes flip-out {
+    0% {transform: translateX(0em); z-index: 1;}
+    50% {transform: translateX(3em);}
+    100% {transform: translateX(0em); z-index: -1;}
+}
+
+.button-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
 button {
+    position: absolute;
     padding: 0.30em;
+}
+
+.flip-in {
+    animation-name: flip-in;
+    animation-duration: 0.25s;
+}
+
+.flip-out {
+    animation-name: flip-out;
+    animation-duration: 0.25s;
 }
 
