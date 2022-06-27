@@ -54,13 +54,11 @@ body {
             min-width: calc(var(--input-width));
         }
 
-/* player switch position & styled in player-switch.css */
+/* player switch styled in player-switch.css */
 
-/* theme container positioned & styled in themes-switch.css */
+/* theme container styled in themes-switch.css */
 
-button {
-    padding: 0.30em;
-}
+/* buttons styled in button-flip.css */
 
 h3 {
     position: relative;
