@@ -459,14 +459,17 @@ const init = (() => {
     const _restartButton = document.getElementById('restart');
     const _gameModeButtons = document.querySelectorAll('img.game-mode');
     const _gameModeFilter = document.querySelector('.mode-filter');
+    
     const _diffSelector = document.getElementById('difficulty');
-    console.log(_diffSelector);
+    console.log({_diffSelector});
+
     const _form = document.querySelector('form.player-container');
     let _inputX = document.querySelector('input#X');
     let _inputO = document.querySelector('input#O');
     let _labelX = _inputX.nextElementSibling;
     let _labelO = _inputO.nextElementSibling;
     let gameMode = 'human';
+    let diff = '';
 
     // bind listeners
     _gameModeButtons.forEach(button => button.addEventListener('click', (e) => {
@@ -474,7 +477,7 @@ const init = (() => {
             //// console.log('switch to computer opponent');
             // set input for computer -> will pass to createPlayer()
             _inputO.value = 'computer';
-            _labelO.textContent = 'Computer';
+            _labelO.textContent = 'computer';
             showDiff();
         } else if (e.target.id === 'human') {
             //// console.log('switch to human opponent');
@@ -489,15 +492,22 @@ const init = (() => {
         //// ('new game mode (start click): ' + gameMode);
         //// console.log('');
         // verify entries
-        checkErrors(_inputX);
+        checkInputErrors(_inputX);
         if (gameMode === 'human') {
             // if opponent is human, check for errors
-            checkErrors(_inputO);
+            checkInputErrors(_inputO);
+        } else if (gameMode === 'ai') {
+            checkSelectErrors(_diffSelector);
         };
         // init game
         if (_form.checkValidity() === true) {
             disablePlayerChoice();
-            _labelO.classList = '';
+
+            diff = _diffSelector.value;
+            console.log('diff: ' + diff);
+            _diffSelector.classList.add('hide');
+
+            _labelO.classList.remove('hide');
             setPlayer(_inputX);
             setPlayer(_inputO);
 
@@ -511,6 +521,7 @@ const init = (() => {
         playGame.disableCells(boardSpace);
         playGame.resetCurrPlayer();
         resetGameMode();
+        resetDifficulty();
         unsetPlayers(players);
         playGame.clearMoves();
         computer.clearAvailMoves();
@@ -533,7 +544,7 @@ const init = (() => {
     });
 
     // methods
-    function checkErrors(input) {
+    function checkInputErrors(input) {
         // input no value && no previous error...
         if ((!input.value) && (!input.validity.customError)) {
             createError(input);
@@ -546,6 +557,14 @@ const init = (() => {
         } else if ((input.value) && (!input.validity.customError)) {
             let label = input.nextElementSibling;
             showName(label, input);
+        };
+    };
+    function checkSelectErrors(select) {
+        // no difficulty selected
+        if (select.selectedIndex === 0) {
+            select.setCustomValidity('Computer difficulty?');
+        } else if ((select.validity.customError) && (select.selectedIndex !== 0)) {
+            select.setCustomValidity('');
         };
     };
     function createError(input) {
@@ -619,6 +638,12 @@ const init = (() => {
     function resetGameMode() {
         if (gameMode === 'ai') {
             gameMode = 'human';
+        };
+    };
+    function resetDifficulty() {
+        if (gameMode === 'ai') {
+            _diffSelector.selected = 0;
+            //! set selectedIndex property to default value
         };
     };
 
