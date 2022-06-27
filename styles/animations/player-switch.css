@@ -1,7 +1,8 @@
 .player-desc {
     display: flex;
+    justify-content: space-around;
     align-items: center;
-    height: var(--icon-size);
+    height: var(--icon-size); width: 100%;
 }
 
     .player-desc img {
@@ -13,27 +14,25 @@ div.game-mode {
 }
 
     .mode-filter {
-        position: absolute;
+        z-index: 1;
         top: 0px; left: 0px;
-        height: 100%;
-        width: 100%;
+        height: 100%; width: 100%;
 
         background-color: transparent;
     }
 
     img.game-mode {
         position: absolute;
+        width: var(--icon-shrink-2);
+
         transition: all 0.25s ease;
     }
 
     img.game-mode:not(.selected) {
-        left: 0px;
-        transform: translateX(0.5em);
+        transform: translateX(1em);
         opacity: 0.35;
-        width: var(--icon-shrink-2);
     }
 
     img.game-mode.selected {
-        right: 0px;
-        transform: translateX(-0.5em);
+        transform: translateX(-1em);
     }
