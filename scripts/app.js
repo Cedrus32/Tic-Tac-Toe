@@ -459,6 +459,8 @@ const init = (() => {
     const _restartButton = document.getElementById('restart');
     const _gameModeButtons = document.querySelectorAll('img.game-mode');
     const _gameModeFilter = document.querySelector('.mode-filter');
+    const _diffSelector = document.getElementById('difficulty');
+    console.log(_diffSelector);
     const _form = document.querySelector('form.player-container');
     let _inputX = document.querySelector('input#X');
     let _inputO = document.querySelector('input#O');
@@ -470,14 +472,16 @@ const init = (() => {
     _gameModeButtons.forEach(button => button.addEventListener('click', (e) => {
         if (e.target.id === 'ai') {
             //// console.log('switch to computer opponent');
-            // show computer label
+            // set input for computer -> will pass to createPlayer()
             _inputO.value = 'computer';
-            showName(_labelO, _inputO);
+            _labelO.textContent = 'Computer';
+            showDiff();
         } else if (e.target.id === 'human') {
             //// console.log('switch to human opponent');
             // show human input
-            clearInput(_inputO);
-            hideName(_labelO, _inputO);
+            _inputO.value = '';
+            _labelO.textContent = '';
+            hideDiff();
         }
         gameMode = button.id;
     }));
@@ -569,6 +573,10 @@ const init = (() => {
         hideElement(input); // hides input
         showElement(label); // shows label
     };
+    function showDiff() {
+        hideElement(_inputO);
+        showElement(_diffSelector);
+    }
     function enablePlayerChoice() {
         _gameModeFilter.classList.add('hide');
     }
@@ -592,6 +600,10 @@ const init = (() => {
         hideElement(label); // hides label
         showElement(input); // shows input
     };
+    function hideDiff() {
+        hideElement(_diffSelector);
+        showElement(_inputO);
+    }
     function hideElement(element) {
         element.classList.add('hide');
     };
