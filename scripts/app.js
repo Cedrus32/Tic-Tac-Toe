@@ -501,9 +501,6 @@ const init = (() => {
             playGame.setTicker();
             playGame.getGameMode(gameMode);
             playGame.enableCells(boardSpace);
-
-            _startButton.classList.add('hide');
-            _restartButton.classList.remove('hide');
         };
     });
     _restartButton.addEventListener('click', () => {
@@ -520,8 +517,6 @@ const init = (() => {
         playGame.clearWinMatch();
 
         playGame.clearCellStyle();
-        _startButton.classList.remove('hide');
-        _restartButton.classList.add('hide');
         enablePlayerChoice();
 
         //// console.log('game mode: ' + gameMode);
