@@ -21,7 +21,7 @@
 .next,
 .prev {
     opacity: 0.35;
-    width: var(--icon-shrink);
+    width: var(--icon-shrink-1);
 }
 
 .next {

@@ -1,10 +1,14 @@
 .player-desc {
+    display: flex;
+    align-items: center;
     height: var(--icon-size);
 }
 
+    .player-desc img {
+        width: var(--icon-size);
+    }
+
 div.game-mode {
-    display: flex;
-    align-items: center;
     position: relative;
 }
 
@@ -26,7 +30,7 @@ div.game-mode {
         left: 0px;
         transform: translateX(0.5em);
         opacity: 0.35;
-        width: var(--icon-shrink);
+        width: var(--icon-shrink-2);
     }
 
     img.game-mode.selected {
