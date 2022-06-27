@@ -470,19 +470,19 @@ const init = (() => {
     _gameModeButtons.forEach(button => button.addEventListener('click', (e) => {
         if (e.target.id === 'ai') {
             //// console.log('switch to computer opponent');
-            // deselect human
-            _gameModeButtons[0].classList.remove('selected');
-            // select computer
-            e.target.classList.add('selected');
+            // // deselect human
+            // _gameModeButtons[0].classList.remove('selected');
+            // // select computer
+            // e.target.classList.add('selected');
             // show computer label
             _inputO.value = 'computer';
             showName(_labelO, _inputO);
         } else if (e.target.id === 'human') {
             //// console.log('switch to human opponent');
-            // deselect computer
-            _gameModeButtons[1].classList.remove('selected');
-            // select human
-            e.target.classList.add('selected');
+            // // deselect computer
+            // _gameModeButtons[1].classList.remove('selected');
+            // // select human
+            // e.target.classList.add('selected');
 
             // show human input
             clearInput(_inputO);
