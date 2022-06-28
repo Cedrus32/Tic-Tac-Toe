@@ -70,7 +70,10 @@ const computer = (() => {
     let availMoves = [];
     const boardSpace = gameboard.returnBoardSpace();
     const boardArray = gameboard.returnBoardArray();
-    let difficulty = '';
+    let diff = '';
+    let _easyPerm = false;
+    let _medPerm = false;
+    let _hardPerm = false;
 
     // cache DOM
 
@@ -92,18 +95,23 @@ const computer = (() => {
         //// console.log('availMoves: ' + availMoves);
     };
     function selectMove() {
-        console.log('difficulty: ' + difficulty);
+        console.log('difficulty: ' + diff);
+        console.log('permission check: ' + '_easyPerm = ' + _easyPerm + '; ' + '_medPerm = ' + _medPerm + '; ' + '_hardPerm = ' + _hardPerm)
         //// console.log('selectMove()...');
         let validMove = false;
         let n;
         let move;
 
-        while (validMove === false) {
-            n = Math.floor(Math.random() * 9);
-            move = n.toString();
-            //// console.log({move});
-            if (availMoves.includes(move)) {
-                validMove = true;
+        getPermissions(diff);
+        
+        if ((diff === 'easy') || (_easyPerm === true)) {
+            while (validMove === false) {
+                n = Math.floor(Math.random() * 9);
+                move = n.toString();
+                //// console.log({move});
+                if (availMoves.includes(move)) {
+                    validMove = true;
+                };
             };
         };
 
@@ -129,7 +137,24 @@ const computer = (() => {
         //// console.log('availMoves: [' + availMoves + ']');
     };
     function getDifficulty(value) {
-        difficulty = value;
+        diff = value;
+    };
+    function getPermissions(value) {
+        if (value === 'med') {
+            _easyPerm = true;
+        } else if (value === 'hard') {
+            _easyPerm = true;
+            _medPerm = true;
+        } else if (value === 'imp') {
+            _easyPerm = true;
+            _medPerm = true;
+            _hardPerm = true;
+        };
+    }
+    function resetPermissions() {
+        _easyPerm = false;
+        _medPerm = false;
+        _hardPerm = false;
     };
 
     //actions
@@ -465,10 +490,7 @@ const init = (() => {
     const _restartButton = document.getElementById('restart');
     const _gameModeButtons = document.querySelectorAll('img.game-mode');
     const _gameModeFilter = document.querySelector('.mode-filter');
-    
     const _diffSelector = document.getElementById('difficulty');
-    console.log({_diffSelector});
-
     const _form = document.querySelector('form.player-container');
     let _inputX = document.querySelector('input#X');
     let _inputO = document.querySelector('input#O');
