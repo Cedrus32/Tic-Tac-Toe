@@ -68,6 +68,9 @@ const gameboard = (() => {
 const computer = (() => {
     // data
     let availMoves = [];
+    let wins = [];
+    let xMarks = [];
+
     const boardSpace = gameboard.returnBoardSpace();
     const boardArray = gameboard.returnBoardArray();
     let diff = '';
@@ -96,7 +99,8 @@ const computer = (() => {
     };
     function selectMove() {
         console.log('difficulty: ' + diff);
-        console.log('permission check: ' + '_easyPerm = ' + _easyPerm + '; ' + '_medPerm = ' + _medPerm + '; ' + '_hardPerm = ' + _hardPerm)
+        // console.log('permission check: ' + '_easyPerm = ' + _easyPerm + '; ' + '_medPerm = ' + _medPerm + '; ' + '_hardPerm = ' + _hardPerm)
+        // console.log(wins);
         //// console.log('selectMove()...');
         let validMove = false;
         let n;
@@ -114,20 +118,40 @@ const computer = (() => {
 
         if ((diff === 'med') || (_medPerm === true)) {
             // block X, then vvv
-        };
-        
-        if ((diff === 'easy') || (_easyPerm === true)) {
-            while (validMove === false) {
-                n = Math.floor(Math.random() * 9);
-                move = n.toString();
-                //// console.log({move});
-                if (availMoves.includes(move)) {
-                    validMove = true;
+            for (let set in wins) {
+                let matches = 0;
+                let mark = 0;
+                let setRef = [...wins[set]];
+                while ((matches < 2) && (mark < 3)) {
+                    if (setRef.includes(xMarks[mark])) {
+                        setRef.splice(setRef.indexOf(xMarks[mark]), 1);
+                        matches++;
+                    };
+                    if (matches === 2) {
+                        move = parseInt(setRef[0]);
+                        if (boardArray[move].length === 0) {
+                            move = String(move);
+                            return move;
+                        };
+                    };
+                    mark++;
                 };
             };
         };
-
-        return move;
+        
+        if ((diff === 'easy') || (_easyPerm === true)) {
+            // completely random
+            while (validMove === false) {
+                n = Math.floor(Math.random() * 9);
+                move = n.toString();
+                if (availMoves.includes(move)) {
+                    validMove = true;
+                    //// console.log('move: ' + move);
+                    return move;
+                };
+            };
+        };
+        // return move;
     };
     function markBoard(move) {
         //// console.log('computer.markBoard()...')
@@ -169,6 +193,12 @@ const computer = (() => {
         _hardPerm = false;
         console.log('permissions: ' + '_easyPerm = ' + _easyPerm + '; ' + '_medPerm = ' + _medPerm + '; ' + '_hardPerm = ' + _hardPerm)
     };
+    function getWins(array) {
+        wins = array;
+    };
+    function getxMarks(array) {
+        xMarks = array;
+    };
 
     //actions
 
@@ -181,26 +211,28 @@ const computer = (() => {
         clearAvailMoves,    // used by init click event (_restartButton -> resetGame)
         getDifficulty,      // used by init click event (_startButton)
         resetPermissions,   // used by init click event (_restartButton)
+        getWins,            // used by playGame -> markBoard
+        getxMarks,          // used by
     };
 })();
 
 const playGame = (() => {
     // data
-    const _wins = [['0', '1', '2'],
-                   ['3', '4', '5'],
-                   ['6', '7', '8'],
-                   ['0', '3', '6'],
-                   ['1', '4', '7'],
-                   ['2', '5', '8'],
-                   ['0', '4', '8'],
-                   ['2', '4', '6'],
-                  ];
+    const wins = [['0', '1', '2'],
+                  ['3', '4', '5'],
+                  ['6', '7', '8'],
+                  ['0', '3', '6'],
+                  ['1', '4', '7'],
+                  ['2', '5', '8'],
+                  ['0', '4', '8'],
+                  ['2', '4', '6'],
+                 ];
     let boardArray = gameboard.returnBoardArray();
     let boardSpace = gameboard.returnBoardSpace();
     let availMoves = computer.returnAvailMoves();
 
     let _winMatch = false;
-    let _xMarks = [];
+    let xMarks = [];
     let _oMarks = [];
 
     let players = [];
@@ -272,6 +304,7 @@ const playGame = (() => {
         //// console.log('');
         if ((gameMode === 'ai') && (_turnCounter === 0)) {
             computer.getAvailMoves();
+            computer.getWins(wins);
         };
         if (markValid(e) === true) {
             // count human turn
@@ -285,8 +318,8 @@ const playGame = (() => {
 
             // log human moves
             if (players[_currPlayer].returnMark() === 'X') {
-                _xMarks.push(e.target.id);
-                //// console.log('_xMarks: ' + _xMarks);
+                xMarks.push(e.target.id);
+                //// console.log('xMarks: ' + xMarks);
                 // share human move with computer's available moves
                 if (gameMode === 'ai') {
                     updateAvailMoves(e.target.id);
@@ -302,8 +335,8 @@ const playGame = (() => {
             if (_turnCounter >= 5) {
                 //// console.log('enter checkWin() conditional');
                 if (players[_currPlayer].returnMark() === 'X') {
-                    //// console.log('enter _xMarks winCheck()');
-                    checkWin(_xMarks);
+                    //// console.log('enter xMarks winCheck()');
+                    checkWin(xMarks);
                 } else {
                     //// console.log('enter _oMarks winCheck()');
                     checkWin(_oMarks);
@@ -323,6 +356,9 @@ const playGame = (() => {
             if ((gameMode === 'ai') && (_turnCounter < 9) && (!_winMatch)) {
                 _turnCounter++;
                 //// console.log('_turnCounter: ' + _turnCounter);
+
+                // set xMoves in computer module
+                computer.getxMarks(xMarks);
 
                 // * mark board & update boardArray with computer move
                 console.log('computer selects...')
@@ -384,8 +420,8 @@ const playGame = (() => {
     };
     function checkWin(playerMarks) {
         playerMarks.sort();
-        for (let set in _wins) {
-            _winMatch = _wins[set].every(mark => playerMarks.includes(mark));
+        for (let set in wins) {
+            _winMatch = wins[set].every(mark => playerMarks.includes(mark));
             if (_winMatch) {
                 break;
             };
@@ -420,9 +456,9 @@ const playGame = (() => {
         //// console.log('_winMatch: ' + _winMatch);
     }
     function clearMoves() {
-        _xMarks = [];
+        xMarks = [];
         _oMarks = [];
-        //// console.log('_xMarks: [' + _xMarks + ']');
+        //// console.log('xMarks: [' + xMarks + ']');
         //// console.log('_oMarks: [' + _oMarks + ']');
     };
     function clearCellStyle() {
