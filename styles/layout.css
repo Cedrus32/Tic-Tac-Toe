@@ -41,22 +41,23 @@ body {
     }
 
         input,
-        label {
+        label,
+        select {
             padding: 0.1em;
         }
 
-        input {
+        input,
+        select {
             text-align: center;
             width: var(--input-width);
         }
 
         label {
-            line-height: 1.15em;
+            line-height: 1.3em;
             min-width: calc(var(--input-width));
         }
 
         select {
-            /* display: none; */
             background-color: var(--light);
             border: none;
             border-radius: var(--border-sml-2);
