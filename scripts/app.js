@@ -52,7 +52,7 @@ const gameboard = (() => {
         for (let i = 0; i < (boardArray.length); i++) {
             boardArray[i] = '';
         };
-        //// console.log('boardArray: [' + boardArray + ']');
+        console.log('boardArray: [' + boardArray + ']');
     };
 
     // make public to global
@@ -134,7 +134,7 @@ const computer = (() => {
     };
     function clearAvailMoves() {
         availMoves.length = 0;
-        //// console.log('availMoves: [' + availMoves + ']');
+        console.log('availMoves: [' + availMoves + ']');
     };
     function getDifficulty(value) {
         diff = value;
@@ -155,6 +155,7 @@ const computer = (() => {
         _easyPerm = false;
         _medPerm = false;
         _hardPerm = false;
+        console.log('permissions: ' + '_easyPerm = ' + _easyPerm + '; ' + '_medPerm = ' + _medPerm + '; ' + '_hardPerm = ' + _hardPerm)
     };
 
     //actions
@@ -549,12 +550,10 @@ const init = (() => {
     });
     _restartButton.addEventListener('click', () => {
         playGame.disableCells(boardSpace);
-        
-        resetDifficulty();
-        computer.resetPermissions();
-        resetGameMode();
-
         playGame.resetCurrPlayer();
+        resetDifficulty();
+        resetGameMode();
+        computer.resetPermissions();
         unsetPlayers(players);
         playGame.clearMoves();
         computer.clearAvailMoves();
@@ -567,13 +566,16 @@ const init = (() => {
         playGame.clearCellStyle();
         enablePlayerChoice();
 
-        //// console.log('game mode: ' + gameMode);
+        //// console.log('difficulty: ' + diff);
+        console.log('game mode: ' + gameMode);
+        ////// console.log permissions in main function
         //// console.log('players: [' + players + ']');
         ////// console.log moves in main function
-        ////// console.log availMoves in main function
-        ////// console.log boardArray in main function
+        // console.log availMoves in main function
+        // console.log boardArray in main function
         ////// console.log _winMatch in main function
         //// console.log('');
+
     });
 
     // methods
@@ -676,6 +678,7 @@ const init = (() => {
     function resetDifficulty() {
         if (gameMode === 'ai') {
             _diffSelector.selectedIndex = 0;
+            diff = '';
         };
     };
 
