@@ -52,7 +52,7 @@ const gameboard = (() => {
         for (let i = 0; i < (boardArray.length); i++) {
             boardArray[i] = '';
         };
-        console.log('boardArray: [' + boardArray + ']');
+        //// console.log('boardArray: [' + boardArray + ']');
     };
 
     // make public to global
@@ -104,6 +104,18 @@ const computer = (() => {
 
         getPermissions(diff);
         
+        if ((diff === 'imp')) {
+            // follow minmax logic, then vvv
+        };
+
+        if ((diff === 'hard') || (_hardPerm === true)) {
+            // make primo first moves, then vvv
+        };
+
+        if ((diff === 'med') || (_medPerm === true)) {
+            // block X, then vvv
+        };
+        
         if ((diff === 'easy') || (_easyPerm === true)) {
             while (validMove === false) {
                 n = Math.floor(Math.random() * 9);
@@ -134,7 +146,7 @@ const computer = (() => {
     };
     function clearAvailMoves() {
         availMoves.length = 0;
-        console.log('availMoves: [' + availMoves + ']');
+        //// console.log('availMoves: [' + availMoves + ']');
     };
     function getDifficulty(value) {
         diff = value;
@@ -567,12 +579,12 @@ const init = (() => {
         enablePlayerChoice();
 
         //// console.log('difficulty: ' + diff);
-        console.log('game mode: ' + gameMode);
+        //// console.log('game mode: ' + gameMode);
         ////// console.log permissions in main function
         //// console.log('players: [' + players + ']');
         ////// console.log moves in main function
-        // console.log availMoves in main function
-        // console.log boardArray in main function
+        ////// console.log availMoves in main function
+        ////// console.log boardArray in main function
         ////// console.log _winMatch in main function
         //// console.log('');
 
