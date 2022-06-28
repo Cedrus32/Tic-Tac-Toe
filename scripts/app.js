@@ -167,6 +167,7 @@ const computer = (() => {
         markBoard,          // used by playGame -> markBoard
         clearAvailMoves,    // used by init click event (_restartButton -> resetGame)
         getDifficulty,      // used by init click event (_startButton)
+        resetPermissions,   // used by init click event (_restartButton)
     };
 })();
 
@@ -286,7 +287,7 @@ const playGame = (() => {
             
             // check for human wins
             if (_turnCounter >= 5) {
-                console.log('enter checkWin() conditional');
+                //// console.log('enter checkWin() conditional');
                 if (players[_currPlayer].returnMark() === 'X') {
                     //// console.log('enter _xMarks winCheck()');
                     checkWin(_xMarks);
@@ -548,9 +549,12 @@ const init = (() => {
     });
     _restartButton.addEventListener('click', () => {
         playGame.disableCells(boardSpace);
-        playGame.resetCurrPlayer();
+        
         resetDifficulty();
+        computer.resetPermissions();
         resetGameMode();
+
+        playGame.resetCurrPlayer();
         unsetPlayers(players);
         playGame.clearMoves();
         computer.clearAvailMoves();
@@ -670,7 +674,6 @@ const init = (() => {
         };
     };
     function resetDifficulty() {
-        console.log('enter resetDifficulty()');
         if (gameMode === 'ai') {
             _diffSelector.selectedIndex = 0;
         };
