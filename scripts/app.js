@@ -125,15 +125,17 @@ const computer = (() => {
     
                 if (_xMove === '4') {
                     console.log('randomize cornerMoves[]')
+                    n = Math.floor(Math.random() * 4);
+                    move = cornerMoves[n];
                 } else if (cornerMoves.includes(_xMove)) {
                     console.log('pick 6');
                 } else if ((_xMove !==4) && (!cornerMoves.includes(_xMove))) {
                     console.log('pick center or corners');
                 };
+
+                return move;
             };
         };
-
-        console.log('availMoves: [' + availMoves + ']');
 
         if ((diff === 'med') || (_medPerm === true)) {
             // block X, then vvv
@@ -157,8 +159,6 @@ const computer = (() => {
                 };
             };
         };
-
-        console.log('availMoves: [' + availMoves + ']');
         
         if ((diff === 'easy') || (_easyPerm === true)) {
             // completely random
