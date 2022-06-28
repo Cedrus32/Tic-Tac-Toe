@@ -494,9 +494,10 @@ const init = (() => {
         // verify entries
         checkInputErrors(_inputX);
         if (gameMode === 'human') {
-            // if opponent is human, check for errors
+            // if opponent is human, check for input errors
             checkInputErrors(_inputO);
         } else if (gameMode === 'ai') {
+            // if opponent is ai, check for select errors
             checkSelectErrors(_diffSelector);
         };
         // init game
@@ -520,8 +521,8 @@ const init = (() => {
     _restartButton.addEventListener('click', () => {
         playGame.disableCells(boardSpace);
         playGame.resetCurrPlayer();
+        resetDifficulty();  //! set selectedIndex property to default value
         resetGameMode();
-        resetDifficulty();
         unsetPlayers(players);
         playGame.clearMoves();
         computer.clearAvailMoves();
@@ -641,8 +642,9 @@ const init = (() => {
         };
     };
     function resetDifficulty() {
+        console.log('enter resetDifficulty()');
         if (gameMode === 'ai') {
-            _diffSelector.selected = 0;
+            _diffSelector.selectedIndex = 0;
             //! set selectedIndex property to default value
         };
     };
