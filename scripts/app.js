@@ -71,6 +71,7 @@ const computer = (() => {
     let wins = [];
     let xMarks = [];
 
+    const cornerMoves = ['0', '3', '6', '8'];
     const boardSpace = gameboard.returnBoardSpace();
     const boardArray = gameboard.returnBoardArray();
     let diff = '';
@@ -99,8 +100,7 @@ const computer = (() => {
     };
     function selectMove() {
         console.log('difficulty: ' + diff);
-        // console.log('permission check: ' + '_easyPerm = ' + _easyPerm + '; ' + '_medPerm = ' + _medPerm + '; ' + '_hardPerm = ' + _hardPerm)
-        // console.log(wins);
+        //// console.log('permission check: ' + '_easyPerm = ' + _easyPerm + '; ' + '_medPerm = ' + _medPerm + '; ' + '_hardPerm = ' + _hardPerm)
         //// console.log('selectMove()...');
         let validMove = false;
         let n;
@@ -114,7 +114,26 @@ const computer = (() => {
 
         if ((diff === 'hard') || (_hardPerm === true)) {
             // make primo first moves, then vvv
+            
+            //// check x move
+            // if x move is 4 -> randomize from cornerMoves
+            // else if x move is 0, 2, 6, 8 -> pick 6
+
+            if (xMarks.length === 1) {
+                let _xMove = xMarks[0];
+                console.log('_xMove: ' + _xMove);
+    
+                if (_xMove === '4') {
+                    console.log('randomize cornerMoves[]')
+                } else if (cornerMoves.includes(_xMove)) {
+                    console.log('pick 6');
+                } else if ((_xMove !==4) && (!cornerMoves.includes(_xMove))) {
+                    console.log('pick center or corners');
+                };
+            };
         };
+
+        console.log('availMoves: [' + availMoves + ']');
 
         if ((diff === 'med') || (_medPerm === true)) {
             // block X, then vvv
@@ -138,6 +157,8 @@ const computer = (() => {
                 };
             };
         };
+
+        console.log('availMoves: [' + availMoves + ']');
         
         if ((diff === 'easy') || (_easyPerm === true)) {
             // completely random
@@ -151,7 +172,6 @@ const computer = (() => {
                 };
             };
         };
-        // return move;
     };
     function markBoard(move) {
         //// console.log('computer.markBoard()...')
@@ -299,10 +319,12 @@ const playGame = (() => {
         //// console.log((e.target.classList.length));
     };
     function markBoard(e) {
-        //// console.log('new game mode (mark board): ' + gameMode);
+        console.log('new game mode (mark board): ' + gameMode);
+        console.log('_turnCounter: ' + _turnCounter);
         //// console.log(boardArray);
         //// console.log('');
         if ((gameMode === 'ai') && (_turnCounter === 0)) {
+            console.log(availMoves);
             computer.getAvailMoves();
             computer.getWins(wins);
         };
@@ -477,6 +499,10 @@ const playGame = (() => {
     function resetCurrPlayer() {
         _currPlayer = 0;
     };
+    function clearTurnCounter() {
+        _turnCounter = 0;
+        console.log('_turnCounter: ' + _turnCounter);
+    };
 
     // actions
     gameboard.display();
@@ -493,6 +519,7 @@ const playGame = (() => {
         clearMoves,         // used by init click event (_restartButton)
         clearCellStyle,     // used by init click event (_restartButton)
         resetCurrPlayer,    // used by init click event (_restartButton)
+        clearTurnCounter,   // used by init click event (_restartButton)
     };
 
 })();
@@ -610,6 +637,7 @@ const init = (() => {
         gameboard.clearBoardArray();
         playGame.clearTicker();
         playGame.clearWinMatch();
+        playGame.clearTurnCounter();
 
         playGame.clearCellStyle();
         enablePlayerChoice();
@@ -622,6 +650,7 @@ const init = (() => {
         ////// console.log availMoves in main function
         ////// console.log boardArray in main function
         ////// console.log _winMatch in main function
+        ////// console.log _turnCounter in main function
         //// console.log('');
 
     });
