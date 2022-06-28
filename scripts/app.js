@@ -68,8 +68,9 @@ const gameboard = (() => {
 const computer = (() => {
     // data
     let availMoves = [];
-    let boardArray = gameboard.returnBoardArray();
     const boardSpace = gameboard.returnBoardSpace();
+    const boardArray = gameboard.returnBoardArray();
+    let difficulty = '';
 
     // cache DOM
 
@@ -91,6 +92,7 @@ const computer = (() => {
         //// console.log('availMoves: ' + availMoves);
     };
     function selectMove() {
+        console.log('difficulty: ' + difficulty);
         //// console.log('selectMove()...');
         let validMove = false;
         let n;
@@ -126,6 +128,9 @@ const computer = (() => {
         availMoves.length = 0;
         //// console.log('availMoves: [' + availMoves + ']');
     };
+    function getDifficulty(value) {
+        difficulty = value;
+    };
 
     //actions
 
@@ -136,6 +141,7 @@ const computer = (() => {
         selectMove,         // used by playGame -> markBoard
         markBoard,          // used by playGame -> markBoard
         clearAvailMoves,    // used by init click event (_restartButton -> resetGame)
+        getDifficulty,      // used by init click event (_startButton)
     };
 })();
 
@@ -505,7 +511,6 @@ const init = (() => {
             disablePlayerChoice();
 
             diff = _diffSelector.value;
-            console.log('diff: ' + diff);
             _diffSelector.classList.add('hide');
 
             _labelO.classList.remove('hide');
@@ -515,13 +520,14 @@ const init = (() => {
             playGame.getPlayers(players);
             playGame.setTicker();
             playGame.getGameMode(gameMode);
+            computer.getDifficulty(diff)
             playGame.enableCells(boardSpace);
         };
     });
     _restartButton.addEventListener('click', () => {
         playGame.disableCells(boardSpace);
         playGame.resetCurrPlayer();
-        resetDifficulty();  //! set selectedIndex property to default value
+        resetDifficulty();
         resetGameMode();
         unsetPlayers(players);
         playGame.clearMoves();
@@ -645,7 +651,6 @@ const init = (() => {
         console.log('enter resetDifficulty()');
         if (gameMode === 'ai') {
             _diffSelector.selectedIndex = 0;
-            //! set selectedIndex property to default value
         };
     };
 
