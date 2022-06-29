@@ -71,7 +71,7 @@ const computer = (() => {
     let wins = [];
     let xMarks = [];
 
-    const cornerMoves = ['0', '3', '6', '8'];
+    const cornerMoves = ['0', '2', '6', '8'];
     const boardSpace = gameboard.returnBoardSpace();
     const boardArray = gameboard.returnBoardArray();
     let diff = '';
@@ -128,7 +128,8 @@ const computer = (() => {
                     n = Math.floor(Math.random() * 4);
                     move = cornerMoves[n];
                 } else if (cornerMoves.includes(_xMove)) {
-                    console.log('pick 6');
+                    console.log('enter conditional...');
+                    move = '4';
                 } else if ((_xMove !==4) && (!cornerMoves.includes(_xMove))) {
                     console.log('pick center or corners');
                 };
