@@ -72,6 +72,7 @@ const computer = (() => {
     let xMarks = [];
 
     const cornerMoves = ['0', '2', '6', '8'];
+    const edgeMoves = ['1', '3', '5', '7'];
     const boardSpace = gameboard.returnBoardSpace();
     const boardArray = gameboard.returnBoardArray();
     let diff = '';
@@ -92,7 +93,7 @@ const computer = (() => {
         // if boardArray cell.length === 0, push that index to _availMoves
         for (let i = 0; i < (boardArray.length); i++) {
             if (boardArray[i].length === 0) {
-                let move = i.toString();
+                let move = String(i);
                 availMoves.push(move);
             };
         };
@@ -114,11 +115,6 @@ const computer = (() => {
 
         if ((diff === 'hard') || (_hardPerm === true)) {
             // make primo first moves, then vvv
-            
-            //// check x move
-            // if x move is 4 -> randomize from cornerMoves
-            // else if x move is 0, 2, 6, 8 -> pick 6
-
             if (xMarks.length === 1) {
                 let _xMove = xMarks[0];
                 console.log('_xMove: ' + _xMove);
@@ -128,10 +124,18 @@ const computer = (() => {
                     n = Math.floor(Math.random() * 4);
                     move = cornerMoves[n];
                 } else if (cornerMoves.includes(_xMove)) {
-                    console.log('enter conditional...');
+                    console.log('pick 4');
                     move = '4';
-                } else if ((_xMove !==4) && (!cornerMoves.includes(_xMove))) {
+                } else if (edgeMoves.includes(_xMove)) {
                     console.log('pick center or corners');
+                    let valid = false;
+                    while (valid === false) {
+                        n = Math.floor(Math.random() * 9);
+                        move = String(n);
+                        if (cornerMoves.includes(move) || (move === '4')) {
+                            valid = true;
+                        };
+                    };
                 };
 
                 return move;
@@ -165,7 +169,7 @@ const computer = (() => {
             // completely random
             while (validMove === false) {
                 n = Math.floor(Math.random() * 9);
-                move = n.toString();
+                move = String(n);
                 if (availMoves.includes(move)) {
                     validMove = true;
                     //// console.log('move: ' + move);
