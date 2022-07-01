@@ -108,12 +108,8 @@ const computer = (() => {
         let move;
 
         getPermissions(diff);
-        
-        if ((diff === 'imp')) {
-            // follow minmax logic, then vvv
-        };
 
-        if ((diff === 'hard') || (_hardPerm === true)) {
+        if (diff === 'hard') {
             // make primo first moves, then vvv
             if (xMarks.length === 1) {
                 let _xMove = xMarks[0];
@@ -206,17 +202,12 @@ const computer = (() => {
         } else if (value === 'hard') {
             _easyPerm = true;
             _medPerm = true;
-        } else if (value === 'imp') {
-            _easyPerm = true;
-            _medPerm = true;
-            _hardPerm = true;
         };
-    }
+    };
     function resetPermissions() {
         _easyPerm = false;
         _medPerm = false;
-        _hardPerm = false;
-        console.log('permissions: ' + '_easyPerm = ' + _easyPerm + '; ' + '_medPerm = ' + _medPerm + '; ' + '_hardPerm = ' + _hardPerm)
+        console.log('permissions: ' + '_easyPerm = ' + _easyPerm + '; ' + '_medPerm = ' + _medPerm)
     };
     function getWins(array) {
         wins = array;
